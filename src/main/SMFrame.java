@@ -43,9 +43,6 @@ public class SMFrame extends JFrame{
 		setVisible(true);
 		changePanel("homePanel");
 		
-		
-		
-		
 		homePanel.start();
 	}
 	

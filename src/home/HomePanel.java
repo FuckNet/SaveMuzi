@@ -13,11 +13,13 @@ import listener.SMKeyListener;
 import main.SMFrame;
 
 public class HomePanel extends JPanel{
+	private static final String BG_HOME = "res/background/backgroundHome.png";
+	private static final String LOGO = "res/logo/logo.png";
+	private static final String PUSHBAR = "res/foreground/pushSpace.png";
 	
-	private SMFrame smframe;
-	private Image backgroundHome;// pushSpace;//bufferImage;
-	
-	//private Graphics graphis;
+	private SMFrame smFrame;
+	private Image backgroundHome;
+	private Image pushBarImage;
 	
 	private LoginPanel loginPanel;
 	private SignUpPanel signUpPanel;
@@ -27,7 +29,13 @@ public class HomePanel extends JPanel{
 	
 	public HomePanel(SMFrame smFrame) {
 		setLayout(null);
-		this.smframe = smFrame;
+		this.smFrame = smFrame;
+		loginPanel = new LoginPanel();
+		loginPanel.setLocation((smFrame.getWidth() - loginPanel.getWidth()) / 2 ,
+				(smFrame.getHeight() - loginPanel.getHeight())* 3 / 5);
+		signUpPanel = new SignUpPanel();
+		signUpPanel.setLocation((smFrame.getWidth() - loginPanel.getWidth()) / 2 ,
+				(smFrame.getHeight() - loginPanel.getHeight())* 3 / 5);
 		
 		try {
 			Thread.sleep(200);
@@ -35,21 +43,23 @@ public class HomePanel extends JPanel{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		backgroundHome = Toolkit.getDefaultToolkit().getImage("res/background/backgroundHome.png");
-		//pushSpace = Toolkit.getDefaultToolkit().getImage("res/foreground/pushSpace.png");
-		//bufferImage = createImage(getWidth(), getHeight());
+		backgroundHome = Toolkit.getDefaultToolkit().getImage(BG_HOME);
+		ImageIcon pushBarIcon = new ImageIcon(PUSHBAR);
 		pushBarLabel = new JLabel();
-		pushBarLabel.setSize(400, 100);
+		pushBarLabel.setSize(500, 100);
 		pushBarLabel.setLocation((smFrame.getWidth() - pushBarLabel.getWidth()) / 2,
 				(smFrame.getHeight() - pushBarLabel.getHeight())*4 / 5);
-		pushBarLabel.setIcon(new ImageIcon("res/foreground/pushSpace.png"));
+		pushBarImage = pushBarIcon.getImage();
+		Image pushBarImage2 = pushBarImage.getScaledInstance(pushBarLabel.getWidth(), pushBarLabel.getHeight(),  java.awt.Image.SCALE_SMOOTH);
+		pushBarIcon = new ImageIcon(pushBarImage2);
+		pushBarLabel.setIcon(pushBarIcon);
 		
 		logoLabel = new JLabel();
 		logoLabel.setSize(600, 100);
 		logoLabel.setLocation((smFrame.getWidth() - logoLabel.getWidth()) / 2,
-				(smFrame.getHeight() - logoLabel.getHeight())*1 / 5);
+				(smFrame.getHeight() - logoLabel.getHeight())*1 / 10);
 		
-		logoLabel.setIcon(new ImageIcon("res/logo/logo.png"));
+		logoLabel.setIcon(new ImageIcon(LOGO));
 		add(logoLabel);
 		addKeyListener(new SMKeyListener());
 		
@@ -63,15 +73,21 @@ public class HomePanel extends JPanel{
 				add(pushBarLabel);
 				for(int i = 0; i < 15; i++) {	// sleep 도중 키 이벤트 발생이 안되는 것을 방지하기 위해 잘게 쪼갬
 					Thread.sleep(10);
-					if(SMKeyListener.getKeyState(KeyEvent.VK_SPACE))
+					if(SMKeyListener.getKeyState(KeyEvent.VK_SPACE)) {
+						remove(pushBarLabel);
+						showLogin();
+						
 						return;
+					}
 				}
 				repaint();
 				remove(pushBarLabel);
 				for(int i = 0; i < 15; i++) {
 					Thread.sleep(10);
-					if(SMKeyListener.getKeyState(KeyEvent.VK_SPACE))
+					if(SMKeyListener.getKeyState(KeyEvent.VK_SPACE)) {
+						showLogin();
 						return;
+					}
 				}
 				repaint();
 			} catch (InterruptedException e) {
@@ -81,8 +97,13 @@ public class HomePanel extends JPanel{
 		}
 	}
 
-	private void startLogin() {
-		
+	private void showLogin() {
+//		add(loginPanel);
+//		repaint();
+		smFrame.changePanel("gamePanel");
+	}
+	private void showSignup() {
+	
 	}
 	
 	public void paintComponent(Graphics g) {
