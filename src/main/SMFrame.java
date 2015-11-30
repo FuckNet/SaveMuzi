@@ -7,6 +7,7 @@ import javax.swing.JFrame;
 import game.GamePanel;
 import home.HomePanel;
 import lobby.LobbyPanel;
+import network.SMNet;
 import room.RoomPanel;
 
 //기본 윈도우를 형성하는 프레임을 만든다
@@ -29,6 +30,7 @@ public class SMFrame extends JFrame{
 		setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
 		setResizable(false);
 		
+		smNet = new SMNet();
 		homePanel = new HomePanel(this);
 		lobbyPanel = new LobbyPanel(this);
 		roomPanel = new RoomPanel(this);
@@ -66,6 +68,10 @@ public class SMFrame extends JFrame{
 			gamePanel.requestFocus();
 			break;
 		}
+	}
+	
+	public SMNet getSMNet() {
+		return this.smNet;
 	}
 	
 }

@@ -9,14 +9,15 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import listener.SMKeyListener;
 import main.SMFrame;
+import network.SMNet;
 
 public class HomePanel extends JPanel{
 	private static final String BG_HOME = "res/background/backgroundHome.png";
 	private static final String LOGO = "res/logo/logo.png";
 	private static final String PUSHBAR = "res/foreground/pushSpace.png";
 	
+	private SMNet smNet;
 	private SMFrame smFrame;
 	private Image backgroundHome;
 	private Image pushBarImage;
@@ -36,6 +37,8 @@ public class HomePanel extends JPanel{
 		signUpPanel = new SignUpPanel();
 		signUpPanel.setLocation((smFrame.getWidth() - loginPanel.getWidth()) / 2 ,
 				(smFrame.getHeight() - loginPanel.getHeight())* 3 / 5);
+		
+		smNet = smFrame.getSMNet();
 		
 		try {
 			Thread.sleep(200);
@@ -61,7 +64,14 @@ public class HomePanel extends JPanel{
 		
 		logoLabel.setIcon(new ImageIcon(LOGO));
 		add(logoLabel);
-		addKeyListener(new SMKeyListener());
+		addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				remove(pushBarLabel);
+				showLogin();
+				
+			}
+		});
 		
 		
 	}
@@ -73,21 +83,11 @@ public class HomePanel extends JPanel{
 				add(pushBarLabel);
 				for(int i = 0; i < 15; i++) {	// sleep 도중 키 이벤트 발생이 안되는 것을 방지하기 위해 잘게 쪼갬
 					Thread.sleep(10);
-					if(SMKeyListener.getKeyState(KeyEvent.VK_SPACE)) {
-						remove(pushBarLabel);
-						showLogin();
-						
-						return;
-					}
 				}
 				repaint();
 				remove(pushBarLabel);
 				for(int i = 0; i < 15; i++) {
 					Thread.sleep(10);
-					if(SMKeyListener.getKeyState(KeyEvent.VK_SPACE)) {
-						showLogin();
-						return;
-					}
 				}
 				repaint();
 			} catch (InterruptedException e) {
