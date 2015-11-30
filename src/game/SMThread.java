@@ -6,7 +6,7 @@ import game.GamePanel.Status;
 import listener.SMKeyListener;
 
 public class SMThread extends Thread {
-
+	
 	// private GameScreen gameScreen;
 	private Status status;
 	private GamePanel gamePanel;
@@ -19,7 +19,6 @@ public class SMThread extends Thread {
 
 	public SMThread() {
 		gameInit();
-
 	}
 
 	// public void setGameScreen(GameScreen gameScreen) {

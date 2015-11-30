@@ -3,10 +3,6 @@ package network;
 // read keyboard --> write to network (Thread 로 처리)
 // read network --> write to textArea
 
-import java.awt.Canvas;
-import java.awt.Color;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -15,28 +11,27 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.border.EmptyBorder;
+import game.GamePanel;
 
 public class SMNet {
 	private static final int PORT = 30000;
-	private static final String IP = "127.0.0.1";
+	private static final String IP = "113.198.80.216";
 	
 	private Socket socket; // 연결소켓
 	private InputStream is;
 	private OutputStream os;
 	private DataInputStream dis;
 	private DataOutputStream dos;
+	private GamePanel gamePanel;
 	
 	private int playerNo;
 
 	public SMNet() { // 생성자
 		network();
+	}
+	
+	public void setGamePanel(GamePanel gamePanel) {
+		this.gamePanel = gamePanel;
 	}
 
 	public void network() {
@@ -77,6 +72,7 @@ public class SMNet {
 								dis.read(b);
 								String msg = new String(b);
 								msg = msg.trim();
+								gamePanel.receiveGameMSG(msg);
 								// 받은 메세지 처리
 							} catch (IOException e) {
 								System.out.println("메세지 수신 에러!!");

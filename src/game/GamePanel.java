@@ -57,7 +57,7 @@ public class GamePanel extends JPanel {
 		
 		mainWork.start();
 		
-		addKeyListener(new SMKeyListener(new SMNet()));
+		addKeyListener(new SMKeyListener(smNet));
 		requestFocus();
 	}
 	

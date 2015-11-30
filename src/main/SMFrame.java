@@ -35,6 +35,7 @@ public class SMFrame extends JFrame{
 		lobbyPanel = new LobbyPanel(this);
 		roomPanel = new RoomPanel(this);
 		gamePanel = new GamePanel(this);
+		smNet.setGamePanel(gamePanel);
 		
 		contentPane = this.getContentPane();
 		contentPane.add("homePanel", homePanel);
