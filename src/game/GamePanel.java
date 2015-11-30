@@ -21,6 +21,7 @@ public class GamePanel extends JPanel {
 	private Image dblBuff;
 	private Graphics gc;
 	private Image background;
+	private int maxPlayerNum = 2;
 	
 	private static Random rnd = new Random();
 	
@@ -40,16 +41,12 @@ public class GamePanel extends JPanel {
 		
 		background = Toolkit.getDefaultToolkit().getImage("res/background/backgroundLogin.png");
 		
-		p = new Player[2];
-		p[0] = new Player();
-		p[0].setY(smFrame.getHeight() / 3);
-		add(p[0]);
-
-		p[1] = new Player();
-		p[1].setY(smFrame.getHeight()*2 / 3);
-		add(p[1]);
-		
-		
+		p = new Player[maxPlayerNum + 1];
+		for(int i = 0; i <= maxPlayerNum; i++) {
+			p[i] = new Player();
+			p[i].setY(smFrame.getHeight() / (maxPlayerNum + 1));
+			add(p[i]);
+		}		
 		
 		mainWork = new SMThread();
 		
@@ -96,6 +93,19 @@ public class GamePanel extends JPanel {
 			b = startnum - endnum;
 		a = Math.abs(rnd.nextInt()%(b+1));
 		return (a+startnum);
+	}
+	
+	public void setMaxPlayerNum(int num) {
+		this.maxPlayerNum = num;
+	}
+	
+	public void receiveGameMSG(String msg) {
+		String splitMsg[];
+		splitMsg = msg.split(" ");
+		if(splitMsg.length < 1)
+			return;
+		int playerNum = Integer.parseInt(splitMsg[0]);
+		p[playerNum].setState(Integer.parseInt(splitMsg[2]), splitMsg[1].equals("P"));
 	}
 
 }
