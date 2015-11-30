@@ -37,8 +37,8 @@ public class Player extends JLabel{
 	
 	public void initData() {
 		score=0;
-		x=0;
-		y=23000;
+		x = 0;
+		y = 0;
 		speed=4;
 		degree=-1;
 		mode=1;
@@ -81,7 +81,7 @@ public class Player extends JLabel{
 		switch(mode){
 		case 1:
 			x+=200;
-			if(x>20000) mode=2;
+			if(x>13000) mode=2;
 			break;
 		case 0:
 			if(cnt--==0) {
@@ -92,7 +92,7 @@ public class Player extends JLabel{
 			setLocation(x/100, y/100);
 			break;
 		}
-		if(x<2000) x=2000;
+		if(x<0) x=0;
 		if(x>102400-7000) x=102400-7000;
 		if(y<3000) y=3000;
 		if(y>72000-7000) y=72000-7000;

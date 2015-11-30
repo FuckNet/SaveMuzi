@@ -3,6 +3,7 @@ package game;
 import java.awt.event.KeyEvent;
 
 import game.GamePanel.Status;
+import listener.SMKeyListener;
 
 public class SMThread extends Thread {
 
@@ -48,7 +49,7 @@ public class SMThread extends Thread {
 				process();
 				keyProcess();
 
-				Thread.sleep(100);
+				//Thread.sleep(100);
 
 				if (System.currentTimeMillis() - preTime < delay)
 					Thread.sleep(delay - System.currentTimeMillis() + preTime);
@@ -141,10 +142,10 @@ public class SMThread extends Thread {
 //			}
 //		}
 		
-		players[0].setState(KeyEvent.VK_UP, SMKeyListener.getKeyState(KeyEvent.VK_UP));
-		players[0].setState(KeyEvent.VK_DOWN, SMKeyListener.getKeyState(KeyEvent.VK_DOWN));
-		players[0].setState(KeyEvent.VK_RIGHT, SMKeyListener.getKeyState(KeyEvent.VK_RIGHT));
-		players[0].setState(KeyEvent.VK_LEFT, SMKeyListener.getKeyState(KeyEvent.VK_LEFT));
+		//players[0].setState(KeyEvent.VK_UP, SMKeyListener.getKeyState(KeyEvent.VK_UP));
+		//players[0].setState(KeyEvent.VK_DOWN, SMKeyListener.getKeyState(KeyEvent.VK_DOWN));
+		//players[0].setState(KeyEvent.VK_RIGHT, SMKeyListener.getKeyState(KeyEvent.VK_RIGHT));
+		//players[0].setState(KeyEvent.VK_LEFT, SMKeyListener.getKeyState(KeyEvent.VK_LEFT));
 		
 		
 	}

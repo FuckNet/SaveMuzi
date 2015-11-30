@@ -6,7 +6,9 @@ import java.util.Random;
 
 import javax.swing.JPanel;
 
+import listener.SMKeyListener;
 import main.SMFrame;
+import network.SMNet;
 
 public class GamePanel extends JPanel {
 	
@@ -14,6 +16,7 @@ public class GamePanel extends JPanel {
 	//private GameScreen gameScreen;
 	private SMThread mainWork; 
 	
+	private SMNet smNet;
 	private Player p[];
 	private Image dblBuff;
 	private Graphics gc;
@@ -29,7 +32,7 @@ public class GamePanel extends JPanel {
 		
 		setLayout(null);
 		
-		addKeyListener(new SMKeyListener());
+		smNet = smFrame.getSMNet();
 		
 //		gameScreen = new GameScreen(this);
 //		gameScreen.setBounds(0, 0, smFrame.getWidth(), smFrame.getHeight());
@@ -39,11 +42,11 @@ public class GamePanel extends JPanel {
 		
 		p = new Player[2];
 		p[0] = new Player();
-		p[0].setLocation(50, smFrame.getHeight() / 3);
+		p[0].setY(smFrame.getHeight() / 3);
 		add(p[0]);
 
 		p[1] = new Player();
-		p[1].setLocation(50, smFrame.getHeight()*2 / 3);
+		p[1].setY(smFrame.getHeight()*2 / 3);
 		add(p[1]);
 		
 		
@@ -57,7 +60,7 @@ public class GamePanel extends JPanel {
 		
 		mainWork.start();
 		
-		addKeyListener(new SMKeyListener());
+		addKeyListener(new SMKeyListener(new SMNet()));
 		requestFocus();
 	}
 	
