@@ -15,7 +15,7 @@ public class SMKeyListener extends KeyAdapter{
     public void keyPressed(final KeyEvent e) {
     	String sendStr;
     	sendStr = "P " + e.getKeyCode();
-    	net.send(sendStr);
+    	net.sendToServer(sendStr);
     	
     }
     
@@ -23,7 +23,7 @@ public class SMKeyListener extends KeyAdapter{
     public void keyReleased(final KeyEvent e) {
     	String sendStr;
     	sendStr = "R " + e.getKeyCode();
-    	net.send(sendStr);
+    	net.sendToServer(sendStr);
     }
     
     @Override
