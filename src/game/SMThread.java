@@ -46,7 +46,7 @@ public class SMThread extends Thread {
 
 				gamePanel.repaint();
 				process();
-				keyProcess();
+				//keyProcess();
 
 				//Thread.sleep(100);
 
@@ -92,8 +92,8 @@ public class SMThread extends Thread {
 	}
 
 	private void processPlayer() {
-		for (Player p : players) {
-			p.process();
+		for (int i = 1; i < players.length; i++) {
+			players[i].process();
 		}
 	}
 

@@ -12,6 +12,8 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 
 import game.GamePanel;
+import room.RoomPanel;
+import superPanel.ReceiveJPanel;
 
 public class SMNet {
 	private static final int PORT = 30000;
@@ -22,16 +24,27 @@ public class SMNet {
 	private OutputStream os;
 	private DataInputStream dis;
 	private DataOutputStream dos;
+	private ReceiveJPanel panel;	// 메세지를 받을 패널
 	private GamePanel gamePanel;
+	private RoomPanel roomPanel;
 	
 	private int playerNo;
 
 	public SMNet() { // 생성자
-		network();
 	}
 	
 	public void setGamePanel(GamePanel gamePanel) {
 		this.gamePanel = gamePanel;
+	}
+	public void setRoomPanel(RoomPanel roomPanel) {
+		this.roomPanel = roomPanel;
+	}
+	
+	public void toGamePanel() {
+		this.panel = this.gamePanel;
+	}
+	public void toRoomPanel() {
+		this.panel = this.roomPanel;
 	}
 
 	public void network() {
@@ -72,7 +85,7 @@ public class SMNet {
 								dis.read(b);
 								String msg = new String(b);
 								msg = msg.trim();
-								gamePanel.receiveGameMSG(msg);
+								panel.receiveMSG(msg);
 								// 받은 메세지 처리
 							} catch (IOException e) {
 								System.out.println("메세지 수신 에러!!");
@@ -95,11 +108,15 @@ public class SMNet {
 				});
 		th.start();
 	}
+	
+	public void sendToServer(String str) {
+		String str2 = playerNo + " " + str + "/";
+		sendMSG(str2);
+	}
 
-	public void sendToServer(String str) { // 서버로 메세지를 보내는 메소드
+	public void sendMSG(String str) { // 서버로 메세지를 보내는 메소드
 		try {
 			byte[] bb;
-			str = playerNo + " " + str;
 			bb = str.getBytes();
 			dos.write(bb); //.writeUTF(str);
 		} catch (IOException e) {

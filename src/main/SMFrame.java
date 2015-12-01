@@ -36,6 +36,10 @@ public class SMFrame extends JFrame{
 		roomPanel = new RoomPanel(this);
 		gamePanel = new GamePanel(this);
 		smNet.setGamePanel(gamePanel);
+		smNet.setRoomPanel(roomPanel);
+		smNet.toRoomPanel();
+		//smNet.toGamePanel();
+		smNet.network();
 		
 		contentPane = this.getContentPane();
 		contentPane.add("homePanel", homePanel);
@@ -49,8 +53,25 @@ public class SMFrame extends JFrame{
 		homePanel.start();
 	}
 	
-	public void SequenceControl() {
-		
+	public void sequenceControl(String panelName, int arg0) {
+		// arg0는 패널마다 의미하는 바가 다름
+		switch(panelName) {
+		case "homePanel":
+			changePanel(panelName);
+			break;
+		case "lobbyPanel":
+			changePanel(panelName);
+			break;
+		case "roomPanel":
+			changePanel(panelName);
+			break;
+		case "gamePanel":
+			gamePanel.setMaxPlayerNum(arg0);
+			gamePanel.gameStart();
+			smNet.toGamePanel();
+			changePanel(panelName);
+			break;
+		}
 	}
 	
 	public void changePanel(String panelName) {

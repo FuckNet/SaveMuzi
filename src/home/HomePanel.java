@@ -100,7 +100,8 @@ public class HomePanel extends JPanel{
 	private void showLogin() {
 //		add(loginPanel);
 //		repaint();
-		smFrame.changePanel("gamePanel");
+		smFrame.changePanel("roomPanel");
+		//smFrame.changePanel("gamePanel");
 	}
 	private void showSignup() {
 	
