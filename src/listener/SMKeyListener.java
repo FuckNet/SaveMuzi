@@ -19,6 +19,7 @@ public class SMKeyListener extends KeyAdapter{
 	       else {
 	          return false;
 	       }
+	       
 	    }
 	   
     public SMKeyListener(SMNet smNet) {

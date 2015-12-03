@@ -5,11 +5,10 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.util.Random;
 
-import javax.swing.JPanel;
-
 import listener.SMKeyListener;
 import main.SMFrame;
 import network.SMNet;
+import network.SMQueue;
 import superPanel.ReceiveJPanel;
 
 public class GamePanel extends ReceiveJPanel {
@@ -24,6 +23,7 @@ public class GamePanel extends ReceiveJPanel {
 	private Graphics gc;
 	private Image background;
 	private int maxPlayerNum = 2;
+	private SMQueue smQueue;
 
 	private static Random rnd = new Random();
 
@@ -94,16 +94,12 @@ public class GamePanel extends ReceiveJPanel {
 		splitSlash = msg.split("/");
 		int count = splitSlash.length;
 		for (int i = 0; i < count; i++) {
-			String splitMsg[];
-			splitMsg = splitSlash[i].split(" ");
-			if (splitMsg.length < 1)
-				return;
-			int playerNum = Integer.parseInt(splitMsg[0]);
-			p[playerNum].setState(Integer.parseInt(splitMsg[2]), splitMsg[1].equals("P"));
+			smQueue.addMSG(splitSlash[i]);
 		}
 	}
 
 	public void gameStart() {
+		smQueue = SMQueue.getSMQueue();
 		p = new Player[maxPlayerNum + 1];
 		for (int i = 1; i <= maxPlayerNum; i++) {
 			p[i] = new Player();

@@ -1,16 +1,14 @@
 package game;
 
-import java.awt.event.KeyEvent;
-
 import game.GamePanel.Status;
-import listener.SMKeyListener;
+import network.SMQueue;
 
 public class SMThread extends Thread {
 	
 	// private GameScreen gameScreen;
 	private Status status;
 	private GamePanel gamePanel;
-
+	private SMQueue smQueue;
 	private Player players[];
 
 	// 게임 상태 변수
@@ -35,18 +33,25 @@ public class SMThread extends Thread {
 		cnt = 0;
 		gameCnt = 0;
 		status = Status.GameStart;
+		smQueue = SMQueue.getSMQueue();
 	}
 
 	public void run() {
 		long preTime; // 루프 간격을 조절하기 위한 시간 체크 값
-		int delay = 17; // 루프 딜레이, 1/1000초 단위. > 17/1000초 = 58(프레임/초)
+		int delay = 10; // 루프 딜레이, 1/1000초 단위. > 17/1000초 = 58(프레임/초)
 		try {
 			while (true) {
 				preTime = System.currentTimeMillis();
 
+				//Thread.sleep(50);
 				gamePanel.repaint();
 				process();
 				//keyProcess();
+				
+				for(int i = 0; i < 100; i++) {
+					keyProcess();
+					Thread.sleep(1);
+				}
 
 				//Thread.sleep(100);
 
@@ -98,6 +103,17 @@ public class SMThread extends Thread {
 	}
 
 	private void keyProcess() {
+		String msg = smQueue.getMSG();
+		if(msg==null)
+			return;
+		
+		String splitMsg[] = msg.split(" ");
+		int playerNum;
+		for(int i = 0; i < splitMsg.length; i++) {
+			playerNum = Integer.parseInt(splitMsg[0]);
+			players[playerNum].setState(Integer.parseInt(splitMsg[2]), splitMsg[1].equals("P"));
+		}
+		
 //		if (SMKeyListener.getKeyState(KeyEvent.VK_DOWN) && SMKeyListener.getKeyState(KeyEvent.VK_LEFT)) {
 //			players[0].setY(players[0].getY() + 10);
 //			players[0].setX(players[0].getX() - 10);

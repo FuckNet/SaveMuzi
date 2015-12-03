@@ -39,7 +39,6 @@ public class SMNet {
 	public void setRoomPanel(RoomPanel roomPanel) {
 		this.roomPanel = roomPanel;
 	}
-	
 	public void toGamePanel() {
 		this.panel = this.gamePanel;
 	}
@@ -86,6 +85,7 @@ public class SMNet {
 								String msg = new String(b);
 								msg = msg.trim();
 								panel.receiveMSG(msg);
+								//smQueue.addMSG(msg);
 								// 받은 메세지 처리
 							} catch (IOException e) {
 								System.out.println("메세지 수신 에러!!");
