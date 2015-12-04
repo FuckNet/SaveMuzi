@@ -84,6 +84,10 @@ public class SMNet {
 								dis.read(b);
 								String msg = new String(b);
 								msg = msg.trim();
+								if(msg.equals("/PING")) {
+									sendMSG(msg);
+									continue;
+								}
 								panel.receiveMSG(msg);
 								//smQueue.addMSG(msg);
 								// 받은 메세지 처리

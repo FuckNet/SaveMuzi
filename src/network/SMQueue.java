@@ -16,7 +16,7 @@ public class SMQueue {
 	public synchronized void addMSG(String str) {
 		als.add(str);
 	}
-	
+	  
 	public synchronized String getMSG() {
 		try {
 		return als.remove(0);

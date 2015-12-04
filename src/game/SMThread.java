@@ -38,28 +38,28 @@ public class SMThread extends Thread {
 
 	public void run() {
 		long preTime; // 루프 간격을 조절하기 위한 시간 체크 값
-		int delay = 10; // 루프 딜레이, 1/1000초 단위. > 17/1000초 = 58(프레임/초)
+		int delay = 17; // 루프 딜레이, 1/1000초 단위. > 17/1000초 = 58(프레임/초)
 		try {
 			while (true) {
 				preTime = System.currentTimeMillis();
 
 				//Thread.sleep(50);
-				gamePanel.repaint();
+				//gamePanel.repaint();
 				process();
-				//keyProcess();
+				keyProcess();
 				
-				for(int i = 0; i < 100; i++) {
-					keyProcess();
-					Thread.sleep(1);
-				}
+//				for(int i = 0; i < 100; i++) {
+//					keyProcess();
+//					Thread.sleep(1);
+//				}
 
 				//Thread.sleep(100);
-
+				System.out.println(preTime);
 				if (System.currentTimeMillis() - preTime < delay)
 					Thread.sleep(delay - System.currentTimeMillis() + preTime);
 				// 게임 루프를 처리하는데 걸린 시간을 체크해서 딜레이값에서 차감하여 딜레이를 일정하게 유지한다.
 				// 루프 실행 시간이 딜레이 시간보다 크다면 게임 속도가 느려지게 된다.
-
+				gamePanel.repaint();
 				if (status != Status.GameOver)
 					cnt++;
 			}
