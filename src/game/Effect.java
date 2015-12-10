@@ -9,7 +9,7 @@ public class Effect {
 	private Point dis;
 	private int img;
 	private int kind;
-	private int cnt;
+	protected int cnt;
 		public Effect(int img, int x, int y, int kind){
 			pos=new Point(x,y);
 			_pos=new Point(x,y);

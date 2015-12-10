@@ -4,11 +4,11 @@ import java.awt.Point;
 
 public class Item {
 	//아이템 관리 클래스
-	private Point pos;
-	private Point dis;
+	protected Point pos;
+	protected Point dis;
 	private int speed;
 	private int cnt;
-	private int kind;
+	protected int kind;
 		public Item(int x, int y, int kind){
 			this.kind=kind;
 			pos=new Point(x,y);

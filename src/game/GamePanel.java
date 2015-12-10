@@ -120,7 +120,7 @@ public class GamePanel extends ReceiveJPanel {
 		smQueue = SMQueue.getSMQueue();
 		p = new Player[maxPlayerNum + 1];
 		for (int i = 1; i <= maxPlayerNum; i++) {
-			p[i] = new Player();
+			p[i] = new Player(this);
 			p[i].setY(smFrame.getHeight() * i / (maxPlayerNum + 1));
 			add(p[i]);
 		}

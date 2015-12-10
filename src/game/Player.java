@@ -4,6 +4,7 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
+import java.util.Vector;
 
 import javax.swing.JLabel;
 
@@ -11,6 +12,7 @@ public class Player extends JLabel{
 	
 	private static final int PWIDTH = 70, PHEIGHT = 70;
 	
+	private GamePanel gamePanel;
 	private int score;
 	private int x;
 	private int y;
@@ -21,13 +23,17 @@ public class Player extends JLabel{
 	private int cnt;
 	private int life;
 	private int shieldPoint;
+	private int power;
+	private Vector<Bullet> bullets;
+	private boolean isShoot;
 	private boolean inv;
 	private Image[] character;
 	private Image img;
 	
 	private boolean state[];
 	
-	public Player() {
+	public Player(GamePanel gamePanel) {
+		this.gamePanel = gamePanel;
 		initData();
 		setSize(PWIDTH, PHEIGHT);
 		state = new boolean[999];
@@ -45,8 +51,11 @@ public class Player extends JLabel{
 		mode=1;
 		imgIndex=2;
 		cnt=0;
-		life=3;
+		life=30;
+		bullets = gamePanel.getBullets();
+		isShoot = false;
 		shieldPoint = 0;
+		power = 1;
 		inv = false;
 		character = new Image[9];
 		//이미지 저장
@@ -78,6 +87,10 @@ public class Player extends JLabel{
 			x -= speed * 100;
 			imgIndex = 4;
 		}
+		if(state[KeyEvent.VK_SPACE] == true) {
+			imgIndex = 6;
+			isShoot = true;
+		}
 		
 		switch(mode){
 		case 1:
@@ -90,6 +103,13 @@ public class Player extends JLabel{
 				imgIndex=0;
 			}
 		case 2:
+			if(imgIndex == 6) {
+				if(cnt % 4 == 0 || isShoot) {
+					isShoot = false;
+					Bullet shoot = new Bullet(x+2500, y+1500, 0, 0, 270, 8, power);
+					bullets.add(shoot);
+				}
+			}
 			setLocation(x/100, y/100);
 			break;
 		}
