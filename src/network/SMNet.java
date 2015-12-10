@@ -84,7 +84,7 @@ public class SMNet {
 								dis.read(b);
 								String msg = new String(b);
 								msg = msg.trim();
-								if(msg.equals("/PING")) {
+								if(msg.equals("PING/")) {
 									sendMSG(msg);
 									continue;
 								}
@@ -123,6 +123,7 @@ public class SMNet {
 			byte[] bb;
 			bb = str.getBytes();
 			dos.write(bb); //.writeUTF(str);
+			dos.flush();
 		} catch (IOException e) {
 			System.out.println("메세지 송신 에러!!");
 		}

@@ -12,7 +12,7 @@ import room.RoomPanel;
 
 //기본 윈도우를 형성하는 프레임을 만든다
 public class SMFrame extends JFrame{
-	private final int SCREEN_WIDTH = 1024, SCREEN_HEIGHT = 768;
+	public static final int SCREEN_WIDTH = 1024, SCREEN_HEIGHT = 768;
 	
 	private SMNet smNet;
 	private CardLayout layoutManager;

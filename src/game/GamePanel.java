@@ -4,6 +4,7 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.util.Random;
+import java.util.Vector;
 
 import listener.SMKeyListener;
 import main.SMFrame;
@@ -15,7 +16,7 @@ public class GamePanel extends ReceiveJPanel {
 
 	private SMFrame smFrame;
 	// private GameScreen gameScreen;
-	private SMThread mainWork;
+	public SMThread mainWork;
 
 	private SMNet smNet;
 	private Player p[];
@@ -24,6 +25,7 @@ public class GamePanel extends ReceiveJPanel {
 	private Image background;
 	private int maxPlayerNum = 2;
 	private SMQueue smQueue;
+	private Vector<Bullet> bullets;
 
 	private static Random rnd = new Random();
 
@@ -36,6 +38,8 @@ public class GamePanel extends ReceiveJPanel {
 		this.smFrame = smFrame;
 
 		setLayout(null);
+		
+		init();
 
 		smNet = smFrame.getSMNet();
 
@@ -45,6 +49,14 @@ public class GamePanel extends ReceiveJPanel {
 
 		background = Toolkit.getDefaultToolkit().getImage("res/background/backgroundLogin.png");
 
+	}
+	
+	public void init() {
+		bullets = new Vector<Bullet>();
+	}
+	
+	public void addBullet(Bullet bullet) {
+		bullets.add(bullet);
 	}
 
 	public void setThread(SMThread smThread) {
@@ -69,8 +81,10 @@ public class GamePanel extends ReceiveJPanel {
 	public Player[] getPlayer() {
 		return this.p;
 	}
-
-	public static int RAND(int startnum, int endnum) // 랜덤범위(startnum부터
+	public Vector<Bullet> getBullets() {
+		return this.bullets;
+	}
+	public synchronized static int RAND(int startnum, int endnum) // 랜덤범위(startnum부터
 														// ramdom까지), 랜덤값이 적용될
 														// 변수.
 	{
@@ -85,16 +99,20 @@ public class GamePanel extends ReceiveJPanel {
 
 	public void setMaxPlayerNum(int num) {
 		this.maxPlayerNum = num;
+		Enemy.setMaxPlayerNum(num);
 	}
 
 	@Override
 	public void receiveMSG(String msg) {
-		System.out.println(msg);
+		//System.out.println(msg);
 		String splitSlash[];
 		splitSlash = msg.split("/");
 		int count = splitSlash.length;
 		for (int i = 0; i < count; i++) {
 			smQueue.addMSG(splitSlash[i]);
+			mainWork.keyProcess();
+			mainWork.process();
+			repaint();
 		}
 	}
 
@@ -106,6 +124,8 @@ public class GamePanel extends ReceiveJPanel {
 			p[i].setY(smFrame.getHeight() * i / (maxPlayerNum + 1));
 			add(p[i]);
 		}
+		
+		Enemy.setPlayers(p);
 
 		mainWork = new SMThread();
 

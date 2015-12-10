@@ -20,6 +20,7 @@ public class Player extends JLabel{
 	private int imgIndex;
 	private int cnt;
 	private int life;
+	private int shieldPoint;
 	private boolean inv;
 	private Image[] character;
 	private Image img;
@@ -45,6 +46,7 @@ public class Player extends JLabel{
 		imgIndex=2;
 		cnt=0;
 		life=3;
+		shieldPoint = 0;
 		inv = false;
 		character = new Image[9];
 		//이미지 저장
@@ -54,7 +56,6 @@ public class Player extends JLabel{
 			
 		}
 	}
-	
 	
 	@Override
 	public void paintComponent(Graphics g) {
@@ -101,25 +102,44 @@ public class Player extends JLabel{
 	public void setDegree(int degree) {
 		this.degree = degree;
 	}
-	
 	public void setImgIndex(int imgIndex) {
 		this.imgIndex = imgIndex;
 	}
-	
 	public void setX(int x) {
 		this.x = x * 100;
 	}
-	
 	public void setY(int y) {
 		this.y = y * 100;
 	}
+	public void setMode(int mode) {
+		this.mode = mode;
+	}
+	public void setCnt(int cnt) {
+		this.cnt = cnt;
+	}
+	public void setLife(int life) {
+		this.life = life;
+	}
+	public void setShield(int shieldPoint) {
+		this.shieldPoint = shieldPoint;
+	}
+	
+	
 	
 	public int getX() {
 		return this.x/100;
 	}
-	
 	public int getY() {
 		return this.y/100;
+	}
+	public int getMode() {
+		return this.mode;
+	}
+	public int getShield() {
+		return this.shieldPoint;
+	}
+	public int getLife() {
+		return this.life;
 	}
 	
 }
