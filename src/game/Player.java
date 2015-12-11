@@ -6,6 +6,7 @@ import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.util.Vector;
 
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 
 public class Player extends JLabel{
@@ -24,7 +25,7 @@ public class Player extends JLabel{
 	private int life;
 	private int shieldPoint;
 	private int power;
-	private Vector<Bullet> bullets;
+	private Vector<JComponent> bullets;
 	private boolean isShoot;
 	private boolean inv;
 	private Image[] character;
@@ -51,7 +52,7 @@ public class Player extends JLabel{
 		mode=1;
 		imgIndex=2;
 		cnt=0;
-		life=30;
+		life=300;
 		bullets = gamePanel.getBullets();
 		isShoot = false;
 		shieldPoint = 0;
@@ -106,7 +107,8 @@ public class Player extends JLabel{
 			if(imgIndex == 6) {
 				if(cnt % 4 == 0 || isShoot) {
 					isShoot = false;
-					Bullet shoot = new Bullet(x+2500, y+1500, 0, 0, 270, 8, power);
+					Bullet shoot = new Bullet(x+5000, y+4000, 0, 0, 270, 8, power);
+					gamePanel.add(shoot);
 					bullets.add(shoot);
 				}
 			}

@@ -2,6 +2,8 @@ package game;
 
 import java.util.Vector;
 
+import javax.swing.JComponent;
+
 import game.GamePanel.Status;
 import main.SMFrame;
 import network.SMQueue;
@@ -13,10 +15,10 @@ public class SMThread extends Thread {
 	private GamePanel gamePanel;
 	private SMQueue smQueue;
 	private Player players[];
-	private Vector<Bullet> bullets;
-	private Vector<Enemy> enemies;
-	private Vector<Effect> effects;
-	private Vector<Item> items;
+	private Vector<JComponent> bullets;
+	private Vector<JComponent> enemies;
+	private Vector<JComponent> effects;
+	private Vector<JComponent> items;
 
 	// 게임 상태 변수
 	private int score;
@@ -41,8 +43,13 @@ public class SMThread extends Thread {
 		score = 0;
 		level = 1;
 		isBoss = false;
+		enemies = new Vector<JComponent>();
+		effects = new Vector<JComponent>();
+		items = new Vector<JComponent>();
 		status = Status.GameStart;
 		smQueue = SMQueue.getSMQueue();
+		Bullet.bulletInit();
+		Enemy.enemyInit();
 	}
 
 	public void run() {
@@ -81,7 +88,7 @@ public class SMThread extends Thread {
 		switch (status) {
 		case GameStart:// 스타트
 			processPlayer();
-			// if(mymode==2) status=2;
+			if(players[1].getMode()==2) status=Status.PlayScreen;
 			break;
 		case PlayScreen:// 게임화면
 			processPlayer();
@@ -127,10 +134,14 @@ public class SMThread extends Thread {
 	public void process_ENEMY() {
 		int i;
 		Enemy buff;
+		
 		for (i = 0; i < enemies.size(); i++) {
 			buff = (Enemy) (enemies.elementAt(i));
-			if (!buff.move())
-				enemies.removeElementAt(i);
+			if (!buff.move()) {
+				System.out.println("지워지워");
+				removeObject(enemies, enemies.get(i));
+				//enemies.removeElementAt(i);
+			}
 		}
 	}
 	public void process_BULLET() {
@@ -143,7 +154,8 @@ public class SMThread extends Thread {
 			buff.move();
 			if (buff.dis.x < 10 || buff.dis.x > SMFrame.SCREEN_WIDTH + 10 || buff.dis.y < 10
 					|| buff.dis.y > SMFrame.SCREEN_HEIGHT + 10) {
-				bullets.remove(i);// 화면 밖으로 나가면 총알 제거
+				removeObject(bullets, bullets.get(i));
+				//bullets.remove(i);// 화면 밖으로 나가면 총알 제거
 				continue;
 			}
 			if (buff.from == 0) {// 플레이어가 쏜 총알이 적에게 명중 판정
@@ -159,7 +171,8 @@ public class SMThread extends Thread {
 								if (gameCnt < 2100)
 									gameCnt = 2100;
 							}
-							enemies.remove(j);// 적 캐릭터 소거
+							removeObject(enemies, enemies.get(j));
+							//enemies.remove(j);// 적 캐릭터 소거
 							expl = new Effect(0, ebuff.pos.x, buff.pos.y, 0);
 							effects.add(expl);// 폭발 이펙트 추가
 							// Item tem=new Item(ebuff.pos.x, buff.pos.y,
@@ -173,18 +186,21 @@ public class SMThread extends Thread {
 								tem = new Item(ebuff.pos.x, buff.pos.y, 2);
 							else
 								tem = new Item(ebuff.pos.x, buff.pos.y, 1);
-							items.add(tem);
+							addObject(items, tem);
+							//items.add(tem);
 						}
 						// expl=new Effect(0, ebuff.pos.x, buff.pos.y, 0);
 						expl = new Effect(0, buff.pos.x, buff.pos.y, 0);
-						effects.add(expl);
+						addObject(effects, expl);
+						//effects.add(expl);
 						score++;// 점수 추가
-						bullets.remove(i);// 총알 소거
+						removeObject(bullets, bullets.get(i));
+						//bullets.remove(i);// 총알 소거
 						break;// 총알이 소거되었으므로 루프 아웃
 					}
 				}
 			} else {// 적이 쏜 총알이 플레이어에게 명중 판정
-				for (int k = 1; k <= players.length; k++) {
+				for (int k = 1; k < players.length; k++) {
 					if (players[k].getMode() != 2)
 						continue;
 					dist = GetDistance(players[k].getX(), players[k].getY(), buff.dis.x, buff.dis.y);
@@ -192,9 +208,11 @@ public class SMThread extends Thread {
 						if (players[k].getShield() == 0) {
 							players[k].setMode(3);
 							players[k].setCnt(30);
-							bullets.remove(i);
+							removeObject(bullets, bullets.get(i));
+							//bullets.remove(i);
 							expl = new Effect(0, players[k].getX() * 100 - 2000, players[k].getX() * 100, 0);
-							effects.add(expl);
+							addObject(effects, expl);
+							//effects.add(expl);
 							int temp = players[k].getLife() - 1;
 							players[k].setLife(temp);
 							if (temp <= 0) {
@@ -203,7 +221,8 @@ public class SMThread extends Thread {
 							}
 						} else {// 실드가 있을 경우
 							players[k].setShield(players[k].getShield() - 1);
-							bullets.remove(i);
+							removeObject(bullets, bullets.get(i));
+							//bullets.remove(i);
 						}
 					}
 				}
@@ -217,7 +236,8 @@ public class SMThread extends Thread {
 			if (cnt % 3 == 0)
 				buff.cnt--;
 			if (buff.cnt == 0)
-				effects.removeElementAt(i);
+				removeObject(effects, effects.get(i));
+				//effects.removeElementAt(i);
 		}
 	}
 	public void process_GAMEFLOW() {
@@ -276,13 +296,9 @@ public class SMThread extends Thread {
 				// 기존에 레벨만 올려주던 부분에서, 레벨을 올려주면서 보스 캐릭터를 등장시킨다
 				System.out.println("보스 등장");
 				isBoss = true;
-				Enemy en = new Enemy(gamePanel, 1, SMFrame.SCREEN_WIDTH * 100, 24000, 1, 0, level);// img
-																									// 값이
-																									// 1,
-																									// kind
-																									// 값이
-																									// 1
-				enemies.add(en);
+				Enemy en = new Enemy(gamePanel, 1, SMFrame.SCREEN_WIDTH * 100, 24000, 1, 0, level);
+				addObject(enemies, en);
+				//enemies.add(en);
 				gameCnt = 0;
 				level++;
 			}
@@ -301,7 +317,8 @@ public class SMThread extends Thread {
 						en = new Enemy(gamePanel, 2, SMFrame.SCREEN_WIDTH * 100, newy, 2, mode, level);
 					else
 						en = new Enemy(gamePanel, 0, SMFrame.SCREEN_WIDTH * 100, newy, 0, mode, level);
-					enemies.add(en);
+					addObject(enemies, en);
+					//enemies.add(en);
 				}
 				break;
 			case 2:
@@ -310,7 +327,8 @@ public class SMThread extends Thread {
 						en = new Enemy(gamePanel, 2, SMFrame.SCREEN_WIDTH * 100, newy, 2, mode, level);
 					else
 						en = new Enemy(gamePanel, 0, SMFrame.SCREEN_WIDTH * 100, newy, 0, mode, level);
-					enemies.add(en);
+					addObject(enemies, en);
+					//enemies.add(en);
 				}
 				break;
 			case 3:
@@ -319,7 +337,8 @@ public class SMThread extends Thread {
 						en = new Enemy(gamePanel, 2, SMFrame.SCREEN_WIDTH * 100, newy, 2, mode, level);
 					else
 						en = new Enemy(gamePanel, 0, SMFrame.SCREEN_WIDTH * 100, newy, 0, mode, level);
-					enemies.add(en);
+					addObject(enemies, en);
+					//enemies.add(en);
 				}
 				break;
 			}
@@ -330,7 +349,7 @@ public class SMThread extends Thread {
 		Item buff;
 		for (i = 0; i < items.size(); i++) {
 			buff = (Item) (items.elementAt(i));
-			for (int j = 0; j < players.length; j++) {
+			for (int j = 1; j < players.length; j++) {
 				dist = GetDistance(players[j].getX(), players[j].getY(), buff.dis.x, buff.dis.y);
 				if (dist < 1000) {// 아이템 획득
 					switch (buff.kind) {
@@ -366,9 +385,11 @@ public class SMThread extends Thread {
 									if (gameCnt < 2100)
 										gameCnt = 2100;
 								}
-								enemies.remove(j);// 적 캐릭터 소거
+								removeObject(enemies, enemies.get(j));
+								//enemies.remove(j);// 적 캐릭터 소거
 								expl = new Effect(0, ebuff.pos.x, buff.pos.y, 0);
-								effects.add(expl);// 폭발 이펙트 추가
+								addObject(effects, expl);
+								//effects.add(expl);// 폭발 이펙트 추가
 								// Item tem=new Item(ebuff.pos.x, buff.pos.y,
 								// RAND(1,(level+1)*20)/((level+1)*20));//난수 결과가
 								// 최대값일 때만 생성되는 아이템이 1이 된다
@@ -380,13 +401,15 @@ public class SMThread extends Thread {
 									tem = new Item(ebuff.pos.x, buff.pos.y, 2);
 								else
 									tem = new Item(ebuff.pos.x, buff.pos.y, 1);
-								items.add(tem);
+								addObject(items, tem);
+								//items.add(tem);
 							}
 							// expl=new Effect(0, ebuff.pos.x, buff.pos.y, 0);
 							//effects.add(expl);
 							//score++;// 점수 추가
 							expl = new Effect(0, ebuff.pos.x, ebuff.pos.y, 0);
-							effects.add(expl);// 폭발 이펙트 추가
+							addObject(effects, expl);
+							//effects.add(expl);// 폭발 이펙트 추가
 							ebuff.pos.x = -10000;// 다음 처리에서 소거될 수 있도록
 							score += 50;
 							// enemies.remove(ebuff);//적 캐릭터 소거
@@ -404,13 +427,26 @@ public class SMThread extends Thread {
 						}
 						break;
 					}
-					items.remove(i);
+					removeObject(items, items.get(i));
+					//items.remove(i);
 				} else if (buff.move())
-					items.remove(i);
+					removeObject(items, items.get(i));
+					//items.remove(i);
 			}
 		}
 	}
 
+	public void addObject(Vector<JComponent> vec, JComponent instance) {
+		vec.add(instance);
+		gamePanel.add(instance);
+		System.out.println(instance.getClass().getName());
+	}
+	
+	public void removeObject(Vector<JComponent> vec, JComponent instance) {
+		vec.remove(instance);
+		gamePanel.remove(instance);
+	}
+	
 	public int GetDistance(int x1, int y1, int x2, int y2) {
 		return Math.abs((y2 - y1) * (y2 - y1) + (x2 - x1) * (x2 - x1));
 	}

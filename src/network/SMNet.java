@@ -17,7 +17,7 @@ import superPanel.ReceiveJPanel;
 
 public class SMNet {
 	private static final int PORT = 30000;
-	private static final String IP = "113.198.80.216";
+	private static final String IP = "113.198.80.203";
 	
 	private Socket socket; // 연결소켓
 	private InputStream is;

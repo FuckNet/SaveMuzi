@@ -6,6 +6,8 @@ import java.awt.Toolkit;
 import java.util.Random;
 import java.util.Vector;
 
+import javax.swing.JComponent;
+
 import listener.SMKeyListener;
 import main.SMFrame;
 import network.SMNet;
@@ -23,9 +25,9 @@ public class GamePanel extends ReceiveJPanel {
 	private Image dblBuff;
 	private Graphics gc;
 	private Image background;
-	private int maxPlayerNum = 2;
+	private int maxPlayerNum = 1;
 	private SMQueue smQueue;
-	private Vector<Bullet> bullets;
+	private Vector<JComponent> bullets;
 
 	private static Random rnd = new Random();
 
@@ -52,7 +54,7 @@ public class GamePanel extends ReceiveJPanel {
 	}
 	
 	public void init() {
-		bullets = new Vector<Bullet>();
+		bullets = new Vector<JComponent>();
 	}
 	
 	public void addBullet(Bullet bullet) {
@@ -81,7 +83,7 @@ public class GamePanel extends ReceiveJPanel {
 	public Player[] getPlayer() {
 		return this.p;
 	}
-	public Vector<Bullet> getBullets() {
+	public Vector<JComponent> getBullets() {
 		return this.bullets;
 	}
 	public synchronized static int RAND(int startnum, int endnum) // 랜덤범위(startnum부터

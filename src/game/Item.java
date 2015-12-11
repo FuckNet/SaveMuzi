@@ -2,7 +2,9 @@ package game;
 
 import java.awt.Point;
 
-public class Item {
+import javax.swing.JLabel;
+
+public class Item extends JLabel{
 	//아이템 관리 클래스
 	protected Point pos;
 	protected Point dis;
@@ -25,6 +27,7 @@ public class Item {
 			else if(cnt>=20) speed=-100;
 			dis.x=pos.x/100;
 			if(pos.x<0) ret=true;
+			setLocation(pos.x / 100, pos.y / 100);
 			return ret;
 		}
 }

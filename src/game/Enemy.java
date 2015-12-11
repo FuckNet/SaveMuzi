@@ -1,10 +1,15 @@
 package game;
 
+import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.Point;
+import java.awt.Toolkit;
+
+import javax.swing.JLabel;
 
 import main.SMFrame;
 
-public class Enemy {
+public class Enemy extends JLabel{
 	// 게임에 등장하는 적 캐릭터 관리 클래스
 	private static int maxPlayerNum;
 	private static Player players[];
@@ -13,7 +18,7 @@ public class Enemy {
 	 Point pos;
 	 Point _pos;
 	 Point dis;
-	 int img;
+	 int imgIndex;
 	 int kind;
 	 int life;
 	 int mode;
@@ -21,6 +26,18 @@ public class Enemy {
 	 int shoottype;
 	 int hitrange;// 다양한 크기의 적 캐릭터 수용을 위해 명중 판정 범위를 추가한다.
 	 Bullet bul;
+	 
+	 private static final int NEMONUNWIDTH = 40, NEMONUNHEIGHT = 40;
+	 private static final int GANGCIWIDTH = 70, GANGCIHEIGHT = 70;
+	 
+	 
+	 static Image enemyImg[] = new Image[3];
+	 
+	 public static void enemyInit() {
+		 for(int i = 0; i < enemyImg.length; i++) {
+			 enemyImg[i] = Toolkit.getDefaultToolkit().getImage("res/game/enemy"+i+".png");
+		 }
+	 }
 
 	public Enemy(GamePanel main, int img, int x, int y, int kind, int mode, int level) {
 		this.gamePanel = main;
@@ -29,7 +46,7 @@ public class Enemy {
 		_pos = new Point(x, y);
 		dis = new Point(x / 100, y / 100);
 		this.kind = kind;
-		this.img = img;
+		this.imgIndex = img;
 		this.mode = mode;
 		life = 3 + GamePanel.RAND(0, 5) * level;// 게임 레벨에 따라 라이프와 탄을 쏘는 시간이 짧아진다
 		cnt = GamePanel.RAND(level * 5, 80);
@@ -64,6 +81,7 @@ public class Enemy {
 	public boolean move() {
 		boolean ret = true;
 		int targetPlayer = GamePanel.RAND(1, maxPlayerNum);
+		System.out.println(enemyImg[imgIndex]);
 		// 우선은 공격
 		switch (kind) {
 		case 2:// 위치 네우로이의 경우
@@ -323,9 +341,9 @@ public class Enemy {
 		}
 		dis.x = pos.x / 100;
 		dis.y = pos.y / 100;
-		if (dis.x < 0 || dis.x > 640 || dis.y < 0 || dis.y > 480)
+		if (dis.x < 0 || dis.x > SMFrame.SCREEN_WIDTH || dis.y < 0 || dis.y > SMFrame.SCREEN_HEIGHT)
 			ret = false;
-
+		setLocation(pos.x / 100, pos.y / 100);
 		cnt++;
 		return ret;
 	}
@@ -336,5 +354,127 @@ public class Enemy {
 		double rad=Math.atan2(vx,vy);
 		int degree=(int)((rad*180)/Math.PI);
 		return (degree+180);
+	}
+	@Override
+	public void paintComponent(Graphics g) {
+		int imgw, imgh, sx, sy, wd, ht, anc;
+		System.out.println("그려그려");
+		switch(imgIndex){
+		case 0:
+			sx = ((cnt/8)%7)*36;
+			sy = 0;
+			wd = 36;
+			ht = 36;
+			anc = 4;
+			if(dis.x<0) {
+				wd+=dis.x;
+				sx-=dis.x;
+				dis.x=0;
+			}
+			if(dis.y<0) {
+				ht+=dis.y;
+				sy-=dis.y;
+				dis.y=0;
+			}
+			if(wd<0||ht<0) return;
+			dis.x=dis.x-(anc%3)*(wd/2);
+			dis.y=dis.y-(anc/3)*(ht/2);
+			g.setClip(dis.x, dis.y, wd, ht);
+			g.drawImage(enemyImg[imgIndex], dis.x-sx, dis.y-sy, gamePanel);
+			g.setClip(0,0, SMFrame.SCREEN_WIDTH+10,SMFrame.SCREEN_HEIGHT+30);
+			//drawImageAnc(enemyImg[0], dis.x, dis.y, ((cnt/8)%7)*36,0, 36,36, 4);
+			break;
+		case 1:
+			anc = 4;
+			imgw=enemyImg[imgIndex].getWidth(gamePanel);
+			imgh=enemyImg[imgIndex].getHeight(gamePanel);
+			dis.x=dis.x-(anc%3)*(imgw/2);
+			dis.y=dis.y-(anc/3)*(imgh/2);
+			
+			g.drawImage(enemyImg[imgIndex], 0, 0, gamePanel);
+			//gc.drawImage(img, x,y, this);
+			//drawImageAnc(enemyImg[1], dis.x, dis.y, 4);//보스 출력
+			break;
+		case 2://위치 네우로이
+			switch(mode){
+			case 0://왼쪽에서 오른쪽으로 등장
+			case 1://제자리에서 잠시 정지
+			case 2://아래로 이동
+			case 3://위로 이동
+				sx = 0;
+				sy = 0;
+				wd = 36;
+				ht = 50;
+				anc = 4;
+				if(dis.x<0) {
+					wd+=dis.x;
+					sx-=dis.x;
+					dis.x=0;
+				}
+				if(dis.y<0) {
+					ht+=dis.y;
+					sy-=dis.y;
+					dis.y=0;
+				}
+				if(wd<0||ht<0) return;
+				dis.x=dis.x-(anc%3)*(wd/2);
+				dis.y=dis.y-(anc/3)*(ht/2);
+				g.setClip(dis.x, dis.y, wd, ht);
+				g.drawImage(enemyImg[imgIndex], dis.x-sx, dis.y-sy, gamePanel);
+				g.setClip(0,0, SMFrame.SCREEN_WIDTH+10,SMFrame.SCREEN_HEIGHT+30);
+				//drawImageAnc(enemyImg[2], dis.x, dis.y, 0,0,36,50,4);
+				break;
+			case 5://뒤로 돌아 퇴장
+				sx = 72;
+				sy = 0;
+				wd = 36;
+				ht = 50;
+				anc = 4;
+				if(dis.x<0) {
+					wd+=dis.x;
+					sx-=dis.x;
+					dis.x=0;
+				}
+				if(dis.y<0) {
+					ht+=dis.y;
+					sy-=dis.y;
+					dis.y=0;
+				}
+				if(wd<0||ht<0) return;
+				dis.x=dis.x-(anc%3)*(wd/2);
+				dis.y=dis.y-(anc/3)*(ht/2);
+				g.setClip(dis.x, dis.y, wd, ht);
+				g.drawImage(enemyImg[imgIndex], dis.x-sx, dis.y-sy, gamePanel);
+				g.setClip(0,0, SMFrame.SCREEN_WIDTH+10,SMFrame.SCREEN_HEIGHT+30);
+				//drawImageAnc(enemyImg[2], dis.x, dis.y, 72,0,36,50,4);
+				break;
+			case 4://정지해서 손을 앞으로 내밀고 수평으로 총알 발사
+				sx = 36;
+				sy = 0;
+				wd = 36;
+				ht = 50;
+				anc = 4;
+				if(dis.x<0) {
+					wd+=dis.x;
+					sx-=dis.x;
+					dis.x=0;
+				}
+				if(dis.y<0) {
+					ht+=dis.y;
+					sy-=dis.y;
+					dis.y=0;
+				}
+				if(wd<0||ht<0) return;
+				dis.x=dis.x-(anc%3)*(wd/2);
+				dis.y=dis.y-(anc/3)*(ht/2);
+				g.setClip(dis.x, dis.y, wd, ht);
+				g.drawImage(enemyImg[imgIndex], dis.x-sx, dis.y-sy, gamePanel);
+				g.setClip(0,0, SMFrame.SCREEN_WIDTH+10,SMFrame.SCREEN_HEIGHT+30);
+				//drawImageAnc(enemyImg[2], dis.x, dis.y, 36,0,36,50,4);
+				break;
+			}
+		default:
+			break;
+		}
 	}
 }

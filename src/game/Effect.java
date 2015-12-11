@@ -2,7 +2,9 @@ package game;
 
 import java.awt.Point;
 
-public class Effect {
+import javax.swing.JLabel;
+
+public class Effect extends JLabel{
 	//폭발 등의 이펙트 관리 클래스
 	private Point pos;
 	private Point _pos;
@@ -14,6 +16,7 @@ public class Effect {
 			pos=new Point(x,y);
 			_pos=new Point(x,y);
 			dis=new Point(x/100,y/100);
+			setLocation(dis);
 			this.kind=kind;
 			this.img=img;
 			cnt=16;
