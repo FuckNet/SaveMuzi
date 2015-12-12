@@ -71,11 +71,11 @@ public class SMThread extends Thread {
 
 				// Thread.sleep(100);
 				// System.out.println(preTime);
+				gamePanel.repaint();
 				if (System.currentTimeMillis() - preTime < delay)
 					Thread.sleep(delay - System.currentTimeMillis() + preTime);
 				// 게임 루프를 처리하는데 걸린 시간을 체크해서 딜레이값에서 차감하여 딜레이를 일정하게 유지한다.
 				// 루프 실행 시간이 딜레이 시간보다 크다면 게임 속도가 느려지게 된다.
-				gamePanel.repaint();
 				if (status != Status.GameOver)
 					cnt++;
 			}
@@ -138,7 +138,6 @@ public class SMThread extends Thread {
 		for (i = 0; i < enemies.size(); i++) {
 			buff = (Enemy) (enemies.elementAt(i));
 			if (!buff.move()) {
-				System.out.println("지워지워");
 				removeObject(enemies, enemies.get(i));
 				//enemies.removeElementAt(i);
 			}
@@ -215,6 +214,7 @@ public class SMThread extends Thread {
 							//effects.add(expl);
 							int temp = players[k].getLife() - 1;
 							players[k].setLife(temp);
+							System.out.println("라이프 1 감소 -> " + temp);
 							if (temp <= 0) {
 								status = Status.GameOver;
 								gameCnt = 0;
@@ -439,7 +439,6 @@ public class SMThread extends Thread {
 	public void addObject(Vector<JComponent> vec, JComponent instance) {
 		vec.add(instance);
 		gamePanel.add(instance);
-		System.out.println(instance.getClass().getName());
 	}
 	
 	public void removeObject(Vector<JComponent> vec, JComponent instance) {

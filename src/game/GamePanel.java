@@ -58,6 +58,7 @@ public class GamePanel extends ReceiveJPanel {
 	}
 	
 	public void addBullet(Bullet bullet) {
+		add(bullet);
 		bullets.add(bullet);
 	}
 
@@ -86,9 +87,7 @@ public class GamePanel extends ReceiveJPanel {
 	public Vector<JComponent> getBullets() {
 		return this.bullets;
 	}
-	public synchronized static int RAND(int startnum, int endnum) // 랜덤범위(startnum부터
-														// ramdom까지), 랜덤값이 적용될
-														// 변수.
+	public synchronized static int RAND(int startnum, int endnum)
 	{
 		int a, b;
 		if (startnum < endnum)
@@ -106,7 +105,6 @@ public class GamePanel extends ReceiveJPanel {
 
 	@Override
 	public void receiveMSG(String msg) {
-		//System.out.println(msg);
 		String splitSlash[];
 		splitSlash = msg.split("/");
 		int count = splitSlash.length;
@@ -132,9 +130,6 @@ public class GamePanel extends ReceiveJPanel {
 		mainWork = new SMThread();
 
 		mainWork.setGamePanel(this);
-
-		// gameScreen.setThread(mainWork);
-		// mainWork.setGameScreen(gameScreen);
 
 		mainWork.start();
 

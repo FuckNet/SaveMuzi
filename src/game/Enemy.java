@@ -48,6 +48,26 @@ public class Enemy extends JLabel{
 		this.kind = kind;
 		this.imgIndex = img;
 		this.mode = mode;
+		int width;
+		int height;
+		switch(imgIndex) {
+		case 0:
+			width = enemyImg[img].getWidth(this) / 7;
+			height = enemyImg[img].getHeight(this);
+			break;
+		case 1:
+			width = enemyImg[img].getWidth(this);
+			height = enemyImg[img].getHeight(this);
+			break;
+		case 2:
+			width = enemyImg[img].getWidth(this) / 3;
+			height = enemyImg[img].getHeight(this);
+			break;
+		default:
+			width = enemyImg[img].getWidth(this);
+			height = enemyImg[img].getHeight(this);	
+		}
+		setSize(width, height);
 		life = 3 + GamePanel.RAND(0, 5) * level;// 게임 레벨에 따라 라이프와 탄을 쏘는 시간이 짧아진다
 		cnt = GamePanel.RAND(level * 5, 80);
 		shoottype = GamePanel.RAND(0, 4);
@@ -56,12 +76,12 @@ public class Enemy extends JLabel{
 		case 0:// 큐브 네우로이 전용 셋팅
 			break;
 		case 1:// 보스 전용 셋팅
-			life = 400 + 300 * level;
+			life = 100 + 100 * level;
 			mode = 0;
 			hitrange = 12000;
 			break;
 		case 2:// 위치 네우로이 전용 셋팅
-			life = 20 + GamePanel.RAND(0, 10) * level;
+			life = 10 + GamePanel.RAND(0, 5) * level;
 			hitrange = 2000;
 			cnt = -(GamePanel.RAND(30, 50));
 			break;
@@ -81,7 +101,6 @@ public class Enemy extends JLabel{
 	public boolean move() {
 		boolean ret = true;
 		int targetPlayer = GamePanel.RAND(1, maxPlayerNum);
-		System.out.println(enemyImg[imgIndex]);
 		// 우선은 공격
 		switch (kind) {
 		case 2:// 위치 네우로이의 경우
@@ -104,10 +123,7 @@ public class Enemy extends JLabel{
 		case 0:// 일반 적 캐릭터일 경우
 			switch (shoottype) {// 공격 형태에 따라 각기 다른 공격을 한다.
 			case 0:// 플레이어를 향해 3발을 점사한다
-				if (cnt % 100 == 0 || cnt % 103 == 0 || cnt % 106 == 0) {// cnt로
-																			// 공격
-																			// 간격을
-																			// 체크한다
+				if (cnt % 100 == 0 || cnt % 103 == 0 || cnt % 106 == 0) {
 					bul = new Bullet(pos.x, pos.y, 2, 1, getAngle(pos.x, pos.y, players[targetPlayer].getX() * 100, players[targetPlayer].getY() * 100), 3, 1);
 					gamePanel.addBullet(bul);
 				}
@@ -358,7 +374,6 @@ public class Enemy extends JLabel{
 	@Override
 	public void paintComponent(Graphics g) {
 		int imgw, imgh, sx, sy, wd, ht, anc;
-		System.out.println("그려그려");
 		switch(imgIndex){
 		case 0:
 			sx = ((cnt/8)%7)*36;

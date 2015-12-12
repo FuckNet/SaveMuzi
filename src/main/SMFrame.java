@@ -69,6 +69,7 @@ public class SMFrame extends JFrame{
 			gamePanel.setMaxPlayerNum(arg0);
 			gamePanel.gameStart();
 			smNet.toGamePanel();
+			smNet.setStateToGame();
 			changePanel(panelName);
 			break;
 		}
