@@ -116,6 +116,13 @@ public class Player extends JLabel{
 			}
 			setLocation(x/100, y/100);
 			break;
+		case 3:
+			imgIndex = 8;
+			if(cnt-- == 0) {
+				mode = 0;
+				cnt = 50;
+			}
+			break;
 		}
 		if(x<0) x=0;
 		if(x>SMFrame.SCREEN_WIDTH * 100-7000) x=SMFrame.SCREEN_WIDTH * 100-7000;

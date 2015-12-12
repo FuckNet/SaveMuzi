@@ -55,6 +55,7 @@ public class SMThread extends Thread {
 	public void run() {
 		long preTime; // 루프 간격을 조절하기 위한 시간 체크 값
 		int delay = 17; // 루프 딜레이, 1/1000초 단위. > 17/1000초 = 58(프레임/초)
+		smQueue.clear();
 		try {
 			while (true) {
 				preTime = System.currentTimeMillis();
@@ -173,7 +174,8 @@ public class SMThread extends Thread {
 							removeObject(enemies, enemies.get(j));
 							//enemies.remove(j);// 적 캐릭터 소거
 							expl = new Effect(0, ebuff.pos.x, buff.pos.y, 0);
-							effects.add(expl);// 폭발 이펙트 추가
+							addObject(effects, expl);
+							//effects.add(expl);// 폭발 이펙트 추가
 							// Item tem=new Item(ebuff.pos.x, buff.pos.y,
 							// RAND(1,(level+1)*20)/((level+1)*20));//난수 결과가
 							// 최대값일 때만 생성되는 아이템이 1이 된다
@@ -364,9 +366,8 @@ public class SMThread extends Thread {
 							// Effect expl;
 
 						// 적 전멸 효과
-						int l = enemies.size();
 						Effect expl;
-						for (int k = 0; k < l; k++) {
+						for (int k = 0; k < enemies.size(); k++) {
 							Enemy ebuff = (Enemy) (enemies.elementAt(k));
 							if (ebuff == null)
 								continue;// 만일 해당 인덱스에 적 캐릭터가 생성되어있지 않을 경우를 대비
@@ -412,17 +413,18 @@ public class SMThread extends Thread {
 							//effects.add(expl);// 폭발 이펙트 추가
 							ebuff.pos.x = -10000;// 다음 처리에서 소거될 수 있도록
 							score += 50;
+							removeObject(enemies, ebuff);
 							// enemies.remove(ebuff);//적 캐릭터 소거
 						}
 
 						// 적 총알 전부 소거
-						l = bullets.size();
-						for (int k = 0; k < l; k++) {
+						for (int k = 0; k < bullets.size(); k++) {
 							Bullet bbuff = (Bullet) (bullets.elementAt(k));
 							if (bbuff.from != 0) {
 								bbuff.pos.x = -10000;
 								score++;
 							}
+							removeObject(bullets, bbuff);
 							// bullets.remove(bbuff);
 						}
 						break;
@@ -436,7 +438,7 @@ public class SMThread extends Thread {
 		}
 	}
 
-	public void addObject(Vector<JComponent> vec, JComponent instance) {
+	public synchronized void addObject(Vector<JComponent> vec, JComponent instance) {
 		vec.add(instance);
 		gamePanel.add(instance);
 	}
@@ -444,6 +446,7 @@ public class SMThread extends Thread {
 	public void removeObject(Vector<JComponent> vec, JComponent instance) {
 		vec.remove(instance);
 		gamePanel.remove(instance);
+		System.out.println(instance.getClass().getName() + " 삭제, 현재 : " + vec.size());
 	}
 	
 	public int GetDistance(int x1, int y1, int x2, int y2) {

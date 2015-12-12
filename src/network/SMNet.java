@@ -154,7 +154,6 @@ public class SMNet {
                      String msg = new String(buffer);
                      msg = msg.trim();
                      panel.receiveMSG(msg);
-                     System.out.println("받은 메세지 : " + msg);
                   } catch (IOException e) {
                      e.printStackTrace();
                   }
@@ -190,7 +189,6 @@ public class SMNet {
          DatagramPacket packet = new DatagramPacket(buffer, buffer.length, udpIP, UDP_PORT);
          try {
             udpSocket.send(packet);
-            System.out.println("보낸 메세지 : " + str);
          } catch (IOException e) {
             e.printStackTrace();
          }

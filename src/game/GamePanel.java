@@ -40,23 +40,19 @@ public class GamePanel extends ReceiveJPanel {
 		this.smFrame = smFrame;
 
 		setLayout(null);
-		
+
 		init();
 
 		smNet = smFrame.getSMNet();
 
-		// gameScreen = new GameScreen(this);
-		// gameScreen.setBounds(0, 0, smFrame.getWidth(), smFrame.getHeight());
-		// add(gameScreen);
-
 		background = Toolkit.getDefaultToolkit().getImage("res/background/backgroundLogin.png");
 
 	}
-	
+
 	public void init() {
 		bullets = new Vector<JComponent>();
 	}
-	
+
 	public void addBullet(Bullet bullet) {
 		add(bullet);
 		bullets.add(bullet);
@@ -67,12 +63,11 @@ public class GamePanel extends ReceiveJPanel {
 	}
 
 	@Override
-	protected void paintComponent(Graphics g) {
+	protected synchronized void paintComponent(Graphics g) {
 		super.paintComponent(g);
-
-		dblBuff = createImage(smFrame.getWidth(), smFrame.getHeight());
+		dblBuff = createImage(SMFrame.SCREEN_WIDTH, SMFrame.SCREEN_HEIGHT);
 		gc = dblBuff.getGraphics();
-		gc.drawImage(background, 0, 0, smFrame.getWidth(), smFrame.getHeight(), this);
+		gc.drawImage(background, 0, 0, SMFrame.SCREEN_WIDTH, SMFrame.SCREEN_HEIGHT, this);
 	}
 
 	@Override
@@ -84,11 +79,12 @@ public class GamePanel extends ReceiveJPanel {
 	public Player[] getPlayer() {
 		return this.p;
 	}
+
 	public Vector<JComponent> getBullets() {
 		return this.bullets;
 	}
-	public synchronized static int RAND(int startnum, int endnum)
-	{
+
+	public synchronized static int RAND(int startnum, int endnum) {
 		int a, b;
 		if (startnum < endnum)
 			b = endnum - startnum; // b는 실제 난수 발생 폭
@@ -110,7 +106,6 @@ public class GamePanel extends ReceiveJPanel {
 		int count = splitSlash.length;
 		for (int i = 0; i < count; i++) {
 			smQueue.addMSG(splitSlash[i]);
-			repaint();
 		}
 	}
 
@@ -122,7 +117,7 @@ public class GamePanel extends ReceiveJPanel {
 			p[i].setY(smFrame.getHeight() * i / (maxPlayerNum + 1));
 			add(p[i]);
 		}
-		
+
 		Enemy.setPlayers(p);
 
 		mainWork = new SMThread();

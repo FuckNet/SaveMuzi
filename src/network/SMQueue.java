@@ -16,6 +16,9 @@ public class SMQueue {
 	public synchronized void addMSG(String str) {
 		als.add(str);
 	}
+	public void clear() {
+		als.clear();
+	}
 	  
 	public synchronized String getMSG() {
 		try {

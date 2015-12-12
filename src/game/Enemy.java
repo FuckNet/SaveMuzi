@@ -26,10 +26,9 @@ public class Enemy extends JLabel {
 	protected int shoottype;
 	protected int hitrange;// 다양한 크기의 적 캐릭터 수용을 위해 명중 판정 범위를 추가한다.
 	protected Bullet bul;
-
-	private static final int NEMONUNWIDTH = 40, NEMONUNHEIGHT = 40;
-	private static final int GANGCIWIDTH = 70, GANGCIHEIGHT = 70;
-
+	int eWidth;
+	int eHeight;
+	
 	static Image enemyImg[] = new Image[3];
 
 	public static void enemyInit() {
@@ -47,26 +46,31 @@ public class Enemy extends JLabel {
 		this.kind = kind;
 		this.imgIndex = img;
 		this.mode = mode;
-		int width;
-		int height;
 		switch (imgIndex) {
 		case 0:
-			width = enemyImg[img].getWidth(this) / 7;
-			height = enemyImg[img].getHeight(this);
+			eWidth = 36;
+			eHeight = 36;
+			//eWidth = enemyImg[img].getWidth(this) / 7;
+			//eHeight = enemyImg[img].getHeight(this);
 			break;
 		case 1:
-			width = enemyImg[img].getWidth(this);
-			height = enemyImg[img].getHeight(this);
+			eWidth = 186;
+			eHeight = 186;
+			//eWidth = enemyImg[img].getWidth(this);
+			//eHeight = enemyImg[img].getHeight(this);
 			break;
 		case 2:
-			width = enemyImg[img].getWidth(this) / 3;
-			height = enemyImg[img].getHeight(this);
+			eWidth = 36;
+			eHeight = 50;
+			//eWidth = enemyImg[img].getWidth(this) / 3;
+			//eHeight = enemyImg[img].getHeight(this);
 			break;
 		default:
-			width = enemyImg[img].getWidth(this);
-			height = enemyImg[img].getHeight(this);
+			eWidth = enemyImg[img].getWidth(this);
+			eHeight = enemyImg[img].getHeight(this);
 		}
-		setSize(width, height);
+		//System.out.println("나는 이거야 : " + imgIndex + ", w : " + eWidth + ", h : " + eHeight + " 이거로 함");
+		setSize(eWidth, eHeight);
 		life = 3 + GamePanel.RAND(0, 5) * level;// 게임 레벨에 따라 라이프와 탄을 쏘는 시간이 짧아진다
 		cnt = GamePanel.RAND(level * 5, 80);
 		shoottype = GamePanel.RAND(0, 4);
@@ -363,7 +367,9 @@ public class Enemy extends JLabel {
 		dis.y = pos.y / 100;
 		if (dis.x < 0 || dis.x > SMFrame.SCREEN_WIDTH || dis.y < 0 || dis.y > SMFrame.SCREEN_HEIGHT)
 			ret = false;
-		setLocation(pos.x / 100, pos.y / 100);
+		System.out.println("x : " + dis.x + " , y : " + dis.y + " , w : " + getWidth() + ", h : " + getHeight());
+		setLocation(dis.x, dis.y);
+		setVisible(true);
 		cnt++;
 		return ret;
 	}
@@ -379,43 +385,16 @@ public class Enemy extends JLabel {
 	@Override
 	public void paintComponent(Graphics g) {
 		int imgw, imgh, sx, sy, wd, ht, anc;
+		setVisible(true);
+		//System.out.println("너비 : " + eWidth + ", 높이 : " + eHeight + ", 나는 " + enemyImg[imgIndex]);
 		switch (imgIndex) {
 		case 0:
-			sx = ((cnt / 8) % 7) * 36;
+			sx = ((cnt / 8) % 7) * eWidth;
 			sy = 0;
-			wd = 36;
-			ht = 36;
-			anc = 4;
-			if (dis.x < 0) {
-				wd += dis.x;
-				sx -= dis.x;
-				dis.x = 0;
-			}
-			if (dis.y < 0) {
-				ht += dis.y;
-				sy -= dis.y;
-				dis.y = 0;
-			}
-			if (wd < 0 || ht < 0)
-				return;
-			dis.x = dis.x - (anc % 3) * (wd / 2);
-			dis.y = dis.y - (anc / 3) * (ht / 2);
-			g.setClip(dis.x, dis.y, wd, ht);
-			g.drawImage(enemyImg[imgIndex], dis.x - sx, dis.y - sy, gamePanel);
-			g.setClip(0, 0, SMFrame.SCREEN_WIDTH + 10, SMFrame.SCREEN_HEIGHT + 30);
-			// drawImageAnc(enemyImg[0], dis.x, dis.y, ((cnt/8)%7)*36,0, 36,36,
-			// 4);
+			g.drawImage(enemyImg[imgIndex], 0, 0, eWidth, eHeight, sx, sy, sx + eWidth, sy + eHeight, gamePanel);
 			break;
 		case 1:
-			anc = 4;
-			imgw = enemyImg[imgIndex].getWidth(gamePanel);
-			imgh = enemyImg[imgIndex].getHeight(gamePanel);
-			dis.x = dis.x - (anc % 3) * (imgw / 2);
-			dis.y = dis.y - (anc / 3) * (imgh / 2);
-
-			g.drawImage(enemyImg[imgIndex], 0, 0, gamePanel);
-			// gc.drawImage(img, x,y, this);
-			// drawImageAnc(enemyImg[1], dis.x, dis.y, 4);//보스 출력
+			g.drawImage(enemyImg[imgIndex], 0, 0, eWidth, eHeight, gamePanel);
 			break;
 		case 2:// 위치 네우로이
 			switch (mode) {
@@ -425,77 +404,17 @@ public class Enemy extends JLabel {
 			case 3:// 위로 이동
 				sx = 0;
 				sy = 0;
-				wd = 36;
-				ht = 50;
-				anc = 4;
-				if (dis.x < 0) {
-					wd += dis.x;
-					sx -= dis.x;
-					dis.x = 0;
-				}
-				if (dis.y < 0) {
-					ht += dis.y;
-					sy -= dis.y;
-					dis.y = 0;
-				}
-				if (wd < 0 || ht < 0)
-					return;
-				dis.x = dis.x - (anc % 3) * (wd / 2);
-				dis.y = dis.y - (anc / 3) * (ht / 2);
-				g.setClip(dis.x, dis.y, wd, ht);
-				g.drawImage(enemyImg[imgIndex], dis.x - sx, dis.y - sy, gamePanel);
-				g.setClip(0, 0, SMFrame.SCREEN_WIDTH + 10, SMFrame.SCREEN_HEIGHT + 30);
-				// drawImageAnc(enemyImg[2], dis.x, dis.y, 0,0,36,50,4);
+				g.drawImage(enemyImg[imgIndex], 0, 0, eWidth, eHeight, sx, sy, sx + eWidth, sy + eHeight, gamePanel);				
 				break;
 			case 5:// 뒤로 돌아 퇴장
 				sx = 72;
 				sy = 0;
-				wd = 36;
-				ht = 50;
-				anc = 4;
-				if (dis.x < 0) {
-					wd += dis.x;
-					sx -= dis.x;
-					dis.x = 0;
-				}
-				if (dis.y < 0) {
-					ht += dis.y;
-					sy -= dis.y;
-					dis.y = 0;
-				}
-				if (wd < 0 || ht < 0)
-					return;
-				dis.x = dis.x - (anc % 3) * (wd / 2);
-				dis.y = dis.y - (anc / 3) * (ht / 2);
-				g.setClip(dis.x, dis.y, wd, ht);
-				g.drawImage(enemyImg[imgIndex], dis.x - sx, dis.y - sy, gamePanel);
-				g.setClip(0, 0, SMFrame.SCREEN_WIDTH + 10, SMFrame.SCREEN_HEIGHT + 30);
-				// drawImageAnc(enemyImg[2], dis.x, dis.y, 72,0,36,50,4);
+				g.drawImage(enemyImg[imgIndex], 0, 0, eWidth, eHeight, sx, sy, sx + eWidth, sy + eHeight, gamePanel);
 				break;
 			case 4:// 정지해서 손을 앞으로 내밀고 수평으로 총알 발사
 				sx = 36;
 				sy = 0;
-				wd = 36;
-				ht = 50;
-				anc = 4;
-				if (dis.x < 0) {
-					wd += dis.x;
-					sx -= dis.x;
-					dis.x = 0;
-				}
-				if (dis.y < 0) {
-					ht += dis.y;
-					sy -= dis.y;
-					dis.y = 0;
-				}
-				if (wd < 0 || ht < 0)
-					return;
-				dis.x = dis.x - (anc % 3) * (wd / 2);
-				dis.y = dis.y - (anc / 3) * (ht / 2);
-				g.setClip(dis.x, dis.y, wd, ht);
-				g.drawImage(enemyImg[imgIndex], dis.x - sx, dis.y - sy, gamePanel);
-				g.setClip(0, 0, SMFrame.SCREEN_WIDTH + 10, SMFrame.SCREEN_HEIGHT + 30);
-				// drawImageAnc(enemyImg[2], dis.x, dis.y, 36,0,36,50,4);
+				g.drawImage(enemyImg[imgIndex], 0, 0, eWidth, eHeight, sx, sy, sx + eWidth, sy + eHeight, gamePanel);
 				break;
 			}
 		default:

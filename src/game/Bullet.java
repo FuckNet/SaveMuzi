@@ -47,7 +47,7 @@ public class Bullet extends JLabel {
 		pos.y -= (speed * Math.cos(Math.toRadians(degree)) * 100);
 		dis.x = pos.x / 100;
 		dis.y = pos.y / 100;
-		setLocation(pos.x / 100, pos.y / 100);
+		setLocation(dis.x, dis.y);
 		// if(pos.x<0||pos.y>gScreenWidth*100||pos.y<0||pos.y>gScreenHeight*100)
 		// ebullet[i].pic=255;
 	}
