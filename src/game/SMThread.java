@@ -62,7 +62,7 @@ public class SMThread extends Thread {
 				// Thread.sleep(50);
 				// gamePanel.repaint();
 				process();
-				// keyProcess();
+				keyProcess();
 
 				// for(int i = 0; i < 100; i++) {
 				// keyProcess();
@@ -120,7 +120,7 @@ public class SMThread extends Thread {
 
 	public synchronized void keyProcess() {
 		String msg = smQueue.getMSG();
-		if (msg.equals(null) || msg.equals(""))
+		if (msg == null || msg.equals(""))
 			return;
 
 		String splitMsg[] = msg.split(" ");

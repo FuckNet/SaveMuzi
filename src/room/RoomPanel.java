@@ -1,7 +1,9 @@
 package room;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.Random;
 
+import game.GamePanel;
 import main.SMFrame;
 import network.SMNet;
 import superPanel.ReceiveJPanel;
@@ -22,7 +24,8 @@ public class RoomPanel extends ReceiveJPanel {
 			public void keyPressed(KeyEvent e) {
 				if(e.getKeyCode() == KeyEvent.VK_SPACE) {
 					String str;
-					str = "/START";
+					int seed = (int)(Math.random() * 10);
+					str = "/START "+ seed;
 					smNet.sendMSG(str);
 				}
 			}
@@ -41,6 +44,7 @@ public class RoomPanel extends ReceiveJPanel {
 		// 게임 시작 : /START 4
 		if(splitMsg[0].equals("/START")) {
 			smFrame.sequenceControl("gamePanel", Integer.parseInt(splitMsg[1]));
+			GamePanel.rnd = new Random(Long.parseLong(splitMsg[1]));
 		}
 		
 	}

@@ -120,7 +120,7 @@ public class Player extends JLabel{
 		if(x<0) x=0;
 		if(x>SMFrame.SCREEN_WIDTH * 100-7000) x=SMFrame.SCREEN_WIDTH * 100-7000;
 		if(y<3000) y=3000;
-		if(y>SMFrame.SCREEN_HEIGHT * 100-7000) y=SMFrame.SCREEN_HEIGHT * 100-7000;
+		if(y>SMFrame.SCREEN_HEIGHT * 100-10000) y=SMFrame.SCREEN_HEIGHT * 100-10000;
 	}
 	
 	public void setDegree(int degree) {

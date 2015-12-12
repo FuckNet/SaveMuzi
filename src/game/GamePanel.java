@@ -29,7 +29,7 @@ public class GamePanel extends ReceiveJPanel {
 	private SMQueue smQueue;
 	private Vector<JComponent> bullets;
 
-	private static Random rnd = new Random();
+	public static Random rnd;
 
 	// 1 2 3 4
 	public static enum Status {
@@ -110,8 +110,6 @@ public class GamePanel extends ReceiveJPanel {
 		int count = splitSlash.length;
 		for (int i = 0; i < count; i++) {
 			smQueue.addMSG(splitSlash[i]);
-			mainWork.keyProcess();
-			mainWork.process();
 			repaint();
 		}
 	}
