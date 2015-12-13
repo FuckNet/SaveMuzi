@@ -15,7 +15,7 @@ public class Effect extends Object {
 	protected int cnt;
 	
 	public static final int EFWIDTH = 64;
-	public static final int EFEIGHT = 64;
+	public static final int EFHEIGHT = 64;
 	
 	static Image effectImg[] = new Image[1];
 
@@ -37,6 +37,6 @@ public class Effect extends Object {
 	public void paint(Graphics g) {
 		int sx = ((16-cnt)%4)*64;
 		int sy = ((16-cnt)/4)*64;
-		g.drawImage(effectImg[kind], dis.x, dis.y, dis.x + EFWIDTH, dis.y + EFEIGHT, sx, sy, sx+EFWIDTH, sy+EFEIGHT, null);
+		g.drawImage(effectImg[kind], dis.x, dis.y, dis.x + EFWIDTH, dis.y + EFHEIGHT, sx, sy, sx+EFWIDTH, sy+EFHEIGHT, null);
 	}
 }

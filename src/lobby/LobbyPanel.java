@@ -44,7 +44,8 @@ public class LobbyPanel extends ReceiveJPanel {// implements Runnable{
 		createRoomBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				smNet.sendMSG("/CREATEROOM");
+				smNet.sendMSG("/CREATEROOM ");
+				smFrame.roomPanel.addUser(LoginPanel.userID);
 				smFrame.sequenceControl("roomPanel", rooms.size() + 1);
 			}
 		});
@@ -76,6 +77,7 @@ public class LobbyPanel extends ReceiveJPanel {// implements Runnable{
 
 	@Override
 	public void receiveMSG(String msg) {
+		System.out.println(msg);
 		String splitMsg[];
 		splitMsg = msg.split(" ");
 		if (splitMsg.length < 1)
@@ -85,6 +87,11 @@ public class LobbyPanel extends ReceiveJPanel {// implements Runnable{
 		if (splitMsg[0].equals("/CREATEROOM")) {
 			addRoom();
 		}
+		else if (splitMsg[0].equals("/ENTERROOM")) {
+			for(int i=1; i<splitMsg.length; i++) {
+				smFrame.roomPanel.addUser(splitMsg[i]);
+			}
+		}
 		else {
 			chatTextArea.append(msg + "\n");
 			chatTextArea.setCaretPosition(chatTextArea.getText().length());
@@ -92,20 +99,20 @@ public class LobbyPanel extends ReceiveJPanel {// implements Runnable{
 		}
 	}
 
-	private void addRoom() {
+	public void addRoom() {
 		RoomInfo room = new RoomInfo();
 		room.setLocation(0, RoomInfo.HEIGHT * rooms.size());
 		room.setRoomName("号 " + (rooms.size() + 1));
 		room.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				smNet.sendMSG("/ENTERROOM " + (rooms.indexOf(room) + 1));
+				smNet.sendMSG("/ENTERROOM " + (rooms.indexOf(room) + 1) + " " + LoginPanel.userID);
+				smFrame.roomPanel.addUser(LoginPanel.userID);
 				smFrame.sequenceControl("roomPanel", (rooms.indexOf(room) + 1));
 			}
 		});
 		add(room);
 		rooms.add(room);
-		System.out.println("号 持失");
 		repaint();
 	}
 

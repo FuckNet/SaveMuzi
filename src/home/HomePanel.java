@@ -82,7 +82,6 @@ public class HomePanel extends ReceiveJPanel {
 
 	// Space Bar 입력을 받을 때 Login창을 띄운다.
 	   public void start() {
-
 		      th = new Thread(new Runnable() {
 		         public void run() {
 		            while (true) {
@@ -99,9 +98,6 @@ public class HomePanel extends ReceiveJPanel {
 		                  }
 		                  repaint();
 		               } catch (InterruptedException e) {
-		                  // TODO Auto-generated catch block
-		                  // e.printStackTrace();
-		                  System.out.println("홈 종료");
 		                  break;
 		               }
 		            }
@@ -113,16 +109,16 @@ public class HomePanel extends ReceiveJPanel {
 
 	void showLogin() {
 		add(loginPanel);
+		repaint();
 		loginPanel.tf_ID.setText("");
 		loginPanel.tf_ID.requestFocus();
-		repaint();
 	}
 
 	void showSignup() {
 		add(signUpPanel);
+		repaint();
 		signUpPanel.tf_ID.setText("");
 		signUpPanel.tf_ID.requestFocus();
-		repaint();
 	}
 
 	@Override
@@ -134,7 +130,7 @@ public class HomePanel extends ReceiveJPanel {
 			loginPanel.userID = splitMsg[1];
 			loginPanel.userPW = splitMsg[2];
 			loginPanel.writeUserInfo();
-			smFrame.sequenceControl("lobbyPanel", 0);
+			smFrame.sequenceControl("lobbyPanel", Integer.parseInt(splitMsg[3]));
 		} else if (splitMsg[0].equals("/NONEXTID")) {
 			JOptionPane.showMessageDialog(this, "존재하지 않는 아이디입니다.", "Message", JOptionPane.ERROR_MESSAGE);
 		} else if (splitMsg[0].equals("/WRONGPW")) {

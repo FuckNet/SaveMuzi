@@ -41,7 +41,7 @@ public class GamePanel extends ReceiveJPanel {
 
 		init();
 
-		gameScreen = new GameScreen();
+		gameScreen = new GameScreen(this);
 		gameScreen.init();
 		gameScreen.setSize(SMFrame.SCREEN_WIDTH, SMFrame.SCREEN_HEIGHT);
 		gameScreen.setLocation(0, 0);

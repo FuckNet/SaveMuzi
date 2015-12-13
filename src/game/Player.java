@@ -132,9 +132,9 @@ public class Player {
 			}
 		case 2:
 			if(imgIndex == 6) {
-				if(cnt % 4 == 0 || isShoot) {
+				if(smThread.cnt % 4 == 0 && isShoot) {
 					isShoot = false;
-					Bullet shoot = new Bullet(x+5000, y+4000, 0, 0, 270, 8, power);
+					Bullet shoot = new Bullet(x+5000, y+4000, 0, 0, 270, 12, power);
 					//gamePanel.add(shoot);
 					bullets.add(shoot);
 				}

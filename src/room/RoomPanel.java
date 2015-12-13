@@ -7,6 +7,7 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Random;
+import java.util.Vector;
 
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
@@ -15,6 +16,7 @@ import javax.swing.JTextField;
 
 import game.GamePanel;
 import home.LoginPanel;
+import lobby.RoomInfo;
 import main.SMFrame;
 import network.SMNet;
 import superPanel.ReceiveJPanel;
@@ -29,6 +31,8 @@ public class RoomPanel extends ReceiveJPanel {
 	private JButton createRoomBtn;
 	private JTextArea chatTextArea;
 	private JTextField chatTextField;
+	
+	private Vector<UserInfo> users = new Vector<UserInfo>();
 
 	public void setRoomNum(int roomNum) {
 		this.roomNum = roomNum;
@@ -103,6 +107,14 @@ public class RoomPanel extends ReceiveJPanel {
 		}
 		else if (splitMsg[0].equals("/CREATEROOM"))
 			return;
+		else if (splitMsg[0].equals("/ENTERROOM")) {
+			for(int i=1; i<splitMsg.length; i++) {
+				addUser(splitMsg[i]);
+			}
+		}
+		else if (splitMsg[0].equals("/ENTERUSER")) {
+			addUser(splitMsg[1]);
+		}
 		else {
 			chatTextArea.append(msg + "\n");
 			chatTextArea.setCaretPosition(chatTextArea.getText().length());
@@ -113,5 +125,14 @@ public class RoomPanel extends ReceiveJPanel {
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		g.drawImage(backgroundRoom, 0, 0, getWidth(), getHeight(), this);
+	}
+
+	public void addUser(String userID) {
+		UserInfo user = new UserInfo();
+		user.setLocation(0, UserInfo.HEIGHT * users.size());
+		user.setUserName(userID);
+		users.add(user);
+		add(user);
+		repaint();
 	}
 }

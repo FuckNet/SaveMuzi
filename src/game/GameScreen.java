@@ -4,9 +4,12 @@ import java.awt.Canvas;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.Vector;
 
 import main.SMFrame;
+import network.SMNet;
 
 public class GameScreen extends Canvas {
 	
@@ -16,9 +19,22 @@ public class GameScreen extends Canvas {
 	private Vector<Object> effects;
 	private Vector<Object> items;
 	
+	//private SMNet smNet;
+	private GamePanel gamePanel;
+	
 	private Image dblbuff;
 	private Graphics gc;
 	private Image background = Toolkit.getDefaultToolkit().getImage("res/background/backgroundLogin.png");
+	
+	public GameScreen(GamePanel gamePanel) {
+		this.gamePanel = gamePanel;
+		addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				gamePanel.requestFocus();
+			}
+		});
+	}
 	
 	public void init() {
 		

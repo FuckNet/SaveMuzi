@@ -72,7 +72,7 @@ public class Enemy extends Object {
 		}
 		//System.out.println("나는 이거야 : " + imgIndex + ", w : " + eWidth + ", h : " + eHeight + " 이거로 함");
 		center = new Point((x + eWidth) / 100 / 2, (y + eHeight) / 100 / 2);
-		life = 3 + GamePanel.RAND(0, 5) * level;// 게임 레벨에 따라 라이프와 탄을 쏘는 시간이 짧아진다
+		life = 3 + GamePanel.RAND(0, 3) * level;// 게임 레벨에 따라 라이프와 탄을 쏘는 시간이 짧아진다
 		cnt = GamePanel.RAND(level * 5, 80);
 		shoottype = GamePanel.RAND(0, 4);
 		hitrange = 1500;
@@ -80,7 +80,7 @@ public class Enemy extends Object {
 		case 0:// 큐브 네우로이 전용 셋팅
 			break;
 		case 1:// 보스 전용 셋팅
-			life = 100 + 100 * level;
+			life = 100 + 25 * level;
 			mode = 0;
 			hitrange = 12000;
 			break;
@@ -301,7 +301,7 @@ public class Enemy extends Object {
 			switch (mode) {
 			case 0:
 				pos.x -= 100;
-				if (pos.x < 53000)
+				if (pos.x < 73000)
 					mode = 1;
 				break;
 			case 1:
@@ -340,14 +340,14 @@ public class Enemy extends Object {
 				break;
 			case 4:
 				pos.x -= 800;
-				if (pos.x < 30000) {
+				if (pos.x < 50000) {
 					mode = 8;
 					cnt = 0;
 				}
 				break;
 			case 5:
 				pos.x += 350;
-				if (pos.x > 53000)
+				if (pos.x > 73000)
 					mode = 1;
 				break;
 			case 6:

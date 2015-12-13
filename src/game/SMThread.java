@@ -59,7 +59,7 @@ public class SMThread extends Thread {
 		smQueue = SMQueue.getSMQueue();
 		Bullet.bulletInit();
 		Enemy.enemyInit();
-		Item.itemInit();
+		Item.itemInit(this);
 		Effect.effectInit();
 		Player.playerInit(this);
 	}
@@ -189,7 +189,7 @@ public class SMThread extends Thread {
 							}
 							removeObject(enemies, enemies.get(j));
 							// enemies.remove(j);// 적 캐릭터 소거
-							expl = new Effect(0, ebuff.pos.x, buff.pos.y, 0);
+							expl = new Effect(0, ebuff.pos.x, buff.pos.y - Effect.EFHEIGHT/2, 0);
 							addObject(effects, expl);
 							// effects.add(expl);// 폭발 이펙트 추가
 							// Item tem=new Item(ebuff.pos.x, buff.pos.y,
@@ -207,7 +207,8 @@ public class SMThread extends Thread {
 							// items.add(tem);
 						}
 						// expl=new Effect(0, ebuff.pos.x, buff.pos.y, 0);
-						expl = new Effect(0, buff.pos.x, buff.pos.y, 0);
+						expl = new Effect(0, buff.pos.x, buff.pos.y - Effect.EFHEIGHT*100/2, 0);
+						
 						addObject(effects, expl);
 						// effects.add(expl);
 						score++;// 점수 추가
@@ -227,7 +228,7 @@ public class SMThread extends Thread {
 							players[k].setCnt(30);
 							removeObject(bullets, bullets.get(i));
 							// bullets.remove(i);
-							expl = new Effect(0, players[k].getX() * 100 - 2000, players[k].getX() * 100, 0);
+							expl = new Effect(0, buff.dis.x * 100, buff.dis.y * 100 - Effect.EFHEIGHT*100/2, 0);
 							addObject(effects, expl);
 							// effects.add(expl);
 							int temp = players[k].getLife() - 1;

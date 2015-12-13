@@ -14,16 +14,19 @@ public class Item extends Object {
 	private int cnt;
 	protected int kind;
 	
+	private static SMThread smThread;
+	
 	public static final int IWIDTH = 36;
 	public static final int IHEIGHT = 36;
 
 
 	static Image itemImg[] = new Image[3];
 
-	public static void itemInit() {
+	public static void itemInit(SMThread smThread) {
 		for (int i = 0; i < itemImg.length; i++) {
 			itemImg[i] = Toolkit.getDefaultToolkit().getImage("res/game/item" + i + ".png");
 		}
+		Item.smThread = smThread;
 	}
 
 	
@@ -55,7 +58,7 @@ public class Item extends Object {
 	}
 	
 	public void paint(Graphics g) {
-		int sx = ((cnt/4)%7)*36;
+		int sx = ((smThread.cnt/4)%7)*36;
 		g.drawImage(itemImg[kind], dis.x, dis.y, dis.x + IWIDTH, dis.y + IHEIGHT, sx, 0, sx+IWIDTH, IHEIGHT, null);
 	}
 }

@@ -162,6 +162,7 @@ public class SMNet {
 							dis.read(b);
 							String msg = new String(b);
 							msg = msg.trim();
+							System.out.println("받은 메세지 : " + msg);
 							panel.receiveMSG(msg);
 							// smQueue.addMSG(msg);
 							// 받은 메세지 처리
