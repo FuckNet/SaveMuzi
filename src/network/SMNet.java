@@ -16,18 +16,20 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 
 import game.GamePanel;
+import home.HomePanel;
+import home.LoginPanel;
 import lobby.LobbyPanel;
 import room.RoomPanel;
 import superPanel.ReceiveJPanel;
 
 public class SMNet {
 	private static enum NETSTATE {
-		Lobby, Room, Game
+		Home, Lobby, Room, Game
 	};
 
 	// TCP
 	private static final int PORT = 30000;
-	private static final String IP = "113.198.80.203";
+	private static final String IP = "113.198.80.216";
 
 	private Socket socket; // 연결소켓
 	private InputStream is;
@@ -45,17 +47,22 @@ public class SMNet {
 
 	// GUI
 	private ReceiveJPanel panel; // 메세지를 받을 패널
+	private HomePanel homePanel;
 	private GamePanel gamePanel;
 	private LobbyPanel lobbyPanel;
 	private RoomPanel roomPanel;
 
 	// GAME INFO
 	private int playerNo;
-	private NETSTATE netState = NETSTATE.Lobby;
+	private NETSTATE netState = NETSTATE.Home;
 
 	public SMNet() { // 생성자
 	}
 
+	public void setStateToHome() {
+		netState = NETSTATE.Home;
+	}
+	
 	public void setStateToLobby() {
 		netState = NETSTATE.Lobby;
 	}
@@ -77,6 +84,10 @@ public class SMNet {
 	      netState = NETSTATE.Game;
 	}
 
+	public void setHomePanel(HomePanel homePanel) {
+		this.homePanel = homePanel;
+	}
+
 	public void setLobbyPanel(LobbyPanel lobbyPanel) {
 		this.lobbyPanel = lobbyPanel;
 	}
@@ -88,7 +99,11 @@ public class SMNet {
 	public void setRoomPanel(RoomPanel roomPanel) {
 		this.roomPanel = roomPanel;
 	}
-
+	
+	public void toHomePanel() {
+		this.panel = this.homePanel;
+	}
+	
 	public void toLobbyPanel() {
 		this.panel = this.lobbyPanel;
 	}
@@ -116,6 +131,7 @@ public class SMNet {
 
 		} catch (IOException e) {
 			System.out.println("소켓 접속 에러!!");
+			System.exit(0);
 		}
 	}
 
@@ -138,6 +154,7 @@ public class SMNet {
 			public void run() {
 				while (true) {
 					switch (netState) {
+					case Home:
 					case Lobby:
 					case Room:
 						try {
@@ -145,7 +162,6 @@ public class SMNet {
 							dis.read(b);
 							String msg = new String(b);
 							msg = msg.trim();
-							System.out.println(msg);
 							panel.receiveMSG(msg);
 							// smQueue.addMSG(msg);
 							// 받은 메세지 처리
@@ -193,6 +209,7 @@ public class SMNet {
 
 	public void sendMSG(String str) { // 서버로 메세지를 보내는 메소드
 		switch (netState) {
+		case Home:
 		case Lobby:
 		case Room:
 			try {

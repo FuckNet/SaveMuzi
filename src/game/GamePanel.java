@@ -19,15 +19,13 @@ public class GamePanel extends ReceiveJPanel {
 	private SMFrame smFrame;
 	// private GameScreen gameScreen;
 	public SMThread mainWork;
-
+	
+	private GameScreen gameScreen;
 	private SMNet smNet;
 	private Player p[];
-	private Image dblBuff;
-	private Graphics gc;
-	private Image background;
 	private int maxPlayerNum = 1;
 	private SMQueue smQueue;
-	private Vector<JComponent> bullets;
+	private Vector<Object> bullets;
 
 	public static Random rnd;
 
@@ -43,18 +41,22 @@ public class GamePanel extends ReceiveJPanel {
 
 		init();
 
+		gameScreen = new GameScreen();
+		gameScreen.init();
+		gameScreen.setSize(SMFrame.SCREEN_WIDTH, SMFrame.SCREEN_HEIGHT);
+		gameScreen.setLocation(0, 0);
+		add(gameScreen);
+		
 		smNet = smFrame.getSMNet();
-
-		background = Toolkit.getDefaultToolkit().getImage("res/background/backgroundLogin.png");
 
 	}
 
 	public void init() {
-		bullets = new Vector<JComponent>();
+		bullets = new Vector<Object>();
 	}
 
 	public void addBullet(Bullet bullet) {
-		add(bullet);
+		//add(bullet);
 		bullets.add(bullet);
 	}
 
@@ -62,25 +64,11 @@ public class GamePanel extends ReceiveJPanel {
 		this.mainWork = smThread;
 	}
 
-	@Override
-	protected synchronized void paintComponent(Graphics g) {
-		super.paintComponent(g);
-		dblBuff = createImage(SMFrame.SCREEN_WIDTH, SMFrame.SCREEN_HEIGHT);
-		gc = dblBuff.getGraphics();
-		gc.drawImage(background, 0, 0, SMFrame.SCREEN_WIDTH, SMFrame.SCREEN_HEIGHT, this);
-	}
-
-	@Override
-	protected void paintChildren(Graphics g) {
-		super.paintChildren(gc);
-		g.drawImage(dblBuff, 0, 0, this);
-	}
-
 	public Player[] getPlayer() {
 		return this.p;
 	}
 
-	public Vector<JComponent> getBullets() {
+	public Vector<Object> getBullets() {
 		return this.bullets;
 	}
 
@@ -115,14 +103,15 @@ public class GamePanel extends ReceiveJPanel {
 		for (int i = 1; i <= maxPlayerNum; i++) {
 			p[i] = new Player(this);
 			p[i].setY(smFrame.getHeight() * i / (maxPlayerNum + 1));
-			add(p[i]);
 		}
 
 		Enemy.setPlayers(p);
+		gameScreen.setPlayers(p);
 
 		mainWork = new SMThread();
 
 		mainWork.setGamePanel(this);
+		mainWork.setGameScreen(gameScreen);
 
 		mainWork.start();
 

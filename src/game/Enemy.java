@@ -9,7 +9,7 @@ import javax.swing.JLabel;
 
 import main.SMFrame;
 
-public class Enemy extends JLabel {
+public class Enemy extends Object {
 	// 게임에 등장하는 적 캐릭터 관리 클래스
 	private static int maxPlayerNum;
 	private static Player players[];
@@ -18,6 +18,7 @@ public class Enemy extends JLabel {
 	protected Point pos;
 	protected Point _pos;
 	protected Point dis;
+	protected Point center;
 	protected int imgIndex;
 	protected int kind;
 	protected int life;
@@ -50,27 +51,27 @@ public class Enemy extends JLabel {
 		case 0:
 			eWidth = 36;
 			eHeight = 36;
+			hitrange = 500;
 			//eWidth = enemyImg[img].getWidth(this) / 7;
 			//eHeight = enemyImg[img].getHeight(this);
 			break;
 		case 1:
 			eWidth = 186;
 			eHeight = 186;
+			hitrange = 10000;
 			//eWidth = enemyImg[img].getWidth(this);
 			//eHeight = enemyImg[img].getHeight(this);
 			break;
 		case 2:
 			eWidth = 36;
 			eHeight = 50;
+			hitrange = 700;
 			//eWidth = enemyImg[img].getWidth(this) / 3;
 			//eHeight = enemyImg[img].getHeight(this);
 			break;
-		default:
-			eWidth = enemyImg[img].getWidth(this);
-			eHeight = enemyImg[img].getHeight(this);
 		}
 		//System.out.println("나는 이거야 : " + imgIndex + ", w : " + eWidth + ", h : " + eHeight + " 이거로 함");
-		setSize(eWidth, eHeight);
+		center = new Point((x + eWidth) / 100 / 2, (y + eHeight) / 100 / 2);
 		life = 3 + GamePanel.RAND(0, 5) * level;// 게임 레벨에 따라 라이프와 탄을 쏘는 시간이 짧아진다
 		cnt = GamePanel.RAND(level * 5, 80);
 		shoottype = GamePanel.RAND(0, 4);
@@ -112,7 +113,7 @@ public class Enemy extends JLabel {
 			if (mode != 4)
 				break;
 			if (cnt < 30 && cnt % 5 == 0) {
-				bul = new Bullet(pos.x, pos.y, 2, 1, 90, 5, 1);
+				bul = new Bullet(pos.x, pos.y + eHeight * 100 / 2, 2, 1, 90, 5, 1);
 				gamePanel.addBullet(bul);
 			}
 			if (cnt > 50) {
@@ -129,40 +130,40 @@ public class Enemy extends JLabel {
 			switch (shoottype) {// 공격 형태에 따라 각기 다른 공격을 한다.
 			case 0:// 플레이어를 향해 3발을 점사한다
 				if (cnt % 100 == 0 || cnt % 103 == 0 || cnt % 106 == 0) {
-					bul = new Bullet(pos.x, pos.y, 2, 1, getAngle(pos.x, pos.y, players[targetPlayer].getX() * 100,
+					bul = new Bullet(pos.x + eWidth * 100 / 2, pos.y + eHeight * 100 / 2, 2, 1, getAngle(pos.x, pos.y + eHeight * 100 / 2, players[targetPlayer].getX() * 100,
 							players[targetPlayer].getY() * 100), 3, 1);
 					gamePanel.addBullet(bul);
 				}
 				break;
 			case 1:// 타이머에 맞춰 4방향탄을 발사한다
 				if (cnt % 90 == 0 || cnt % 100 == 0 || cnt % 110 == 0) {
-					bul = new Bullet(pos.x, pos.y, 2, 1, (0 + (cnt % 36) * 10) % 360, 3, 1);
+					bul = new Bullet(pos.x + eWidth * 100 / 2, pos.y + eHeight * 100 / 2, 2, 1, (0 + (cnt % 36) * 10) % 360, 3, 1);
 					gamePanel.addBullet(bul);
-					bul = new Bullet(pos.x, pos.y, 2, 1, (30 + (cnt % 36) * 10) % 360, 3, 1);
+					bul = new Bullet(pos.x + eWidth * 100 / 2, pos.y + eHeight * 100 / 2, 2, 1, (30 + (cnt % 36) * 10) % 360, 3, 1);
 					gamePanel.addBullet(bul);
-					bul = new Bullet(pos.x, pos.y, 2, 1, (60 + (cnt % 36) * 10) % 360, 3, 1);
+					bul = new Bullet(pos.x + eWidth * 100 / 2, pos.y + eHeight * 100 / 2, 2, 1, (60 + (cnt % 36) * 10) % 360, 3, 1);
 					gamePanel.addBullet(bul);
-					bul = new Bullet(pos.x, pos.y, 2, 1, (90 + (cnt % 36) * 10) % 360, 3, 1);
+					bul = new Bullet(pos.x + eWidth * 100 / 2, pos.y + eHeight * 100 / 2, 2, 1, (90 + (cnt % 36) * 10) % 360, 3, 1);
 					gamePanel.addBullet(bul);
 				}
 				break;
 			case 2:// 짧은 간격으로 플레이어 근처를 향해 한 발씩 발사한다
 				if (cnt % 30 == 0 || cnt % 60 == 0 || cnt % 90 == 0 || cnt % 120 == 0 || cnt % 150 == 0
 						|| cnt % 180 == 0) {
-					bul = new Bullet(pos.x, pos.y, 2, 1, (getAngle(pos.x, pos.y, players[targetPlayer].getX() * 100,
+					bul = new Bullet(pos.x + eWidth * 100 / 2, pos.y + eHeight * 100 / 2, 2, 1, (getAngle(pos.x, pos.y + eHeight * 100 / 2, players[targetPlayer].getX() * 100,
 							players[targetPlayer].getY() * 100) + GamePanel.RAND(-20, 20)) % 360, 2, 1);
 					gamePanel.addBullet(bul);
 				}
 				break;
 			case 3:// 플레이어를 향해 3갈래탄을 발사한다
 				if (cnt % 90 == 0 || cnt % 110 == 0 || cnt % 130 == 0) {
-					bul = new Bullet(pos.x, pos.y, 2, 1, getAngle(pos.x, pos.y, players[targetPlayer].getX() * 100,
+					bul = new Bullet(pos.x + eWidth * 100 / 2, pos.y + eHeight * 100 / 2, 2, 1, getAngle(pos.x, pos.y + eHeight * 100 / 2, players[targetPlayer].getX() * 100,
 							players[targetPlayer].getY() * 100), 2, 1);
 					gamePanel.addBullet(bul);
-					bul = new Bullet(pos.x, pos.y, 2, 1, (getAngle(pos.x, pos.y, players[targetPlayer].getX() * 100,
+					bul = new Bullet(pos.x + eWidth * 100 / 2, pos.y + eHeight * 100 / 2, 2, 1, (getAngle(pos.x, pos.y + eHeight * 100 / 2, players[targetPlayer].getX() * 100,
 							players[targetPlayer].getY() * 100) - 20) % 360, 2, 1);
 					gamePanel.addBullet(bul);
-					bul = new Bullet(pos.x, pos.y, 2, 1, (getAngle(pos.x, pos.y, players[targetPlayer].getX() * 100,
+					bul = new Bullet(pos.x + eWidth * 100 / 2, pos.y + eHeight * 100 / 2, 2, 1, (getAngle(pos.x, pos.y + eHeight * 100 / 2, players[targetPlayer].getX() * 100,
 							players[targetPlayer].getY() * 100) + 20) % 360, 2, 1);
 					gamePanel.addBullet(bul);
 				}
@@ -181,7 +182,7 @@ public class Enemy extends JLabel {
 					lv = (10 - level) * 5;
 				if (cnt % lv == 0 || cnt % (lv + 5) == 0 || cnt % (lv + 15) == 0) {
 					for (i = 0; i < 4 + (50 - lv) / 5; i++) {
-						bul = new Bullet(pos.x, pos.y, 2, 1, (30 * i + (cnt % 36) * 10) % 360, 5, 1);
+						bul = new Bullet(pos.x, pos.y + eHeight * 100 / 2, 2, 1, (30 * i + (cnt % 36) * 10) % 360, 5, 1);
 						gamePanel.addBullet(bul);
 					}
 					/*
@@ -200,7 +201,7 @@ public class Enemy extends JLabel {
 					lv = 10 - level;
 				if (cnt % lv == 0) {
 					bul = new Bullet(pos.x - 3000 + GamePanel.RAND(-10, +10) * 100,
-							pos.y + GamePanel.RAND(10, 80) * 100, 2, 1, 90, 5 + (10 - lv) / 2, 1);
+							pos.y + eHeight * 100 / 2 + GamePanel.RAND(10, 80) * 100, 2, 1, 90, 5 + (10 - lv) / 2, 1);
 					gamePanel.addBullet(bul);
 				}
 				break;
@@ -365,11 +366,10 @@ public class Enemy extends JLabel {
 		}
 		dis.x = pos.x / 100;
 		dis.y = pos.y / 100;
+		center.x = dis.x + eWidth/2;
+		center.y = dis.y + eHeight/2;
 		if (dis.x < 0 || dis.x > SMFrame.SCREEN_WIDTH || dis.y < 0 || dis.y > SMFrame.SCREEN_HEIGHT)
 			ret = false;
-		System.out.println("x : " + dis.x + " , y : " + dis.y + " , w : " + getWidth() + ", h : " + getHeight());
-		setLocation(dis.x, dis.y);
-		setVisible(true);
 		cnt++;
 		return ret;
 	}
@@ -382,19 +382,17 @@ public class Enemy extends JLabel {
 		return (degree + 180);
 	}
 
-	@Override
-	public void paintComponent(Graphics g) {
-		int imgw, imgh, sx, sy, wd, ht, anc;
-		setVisible(true);
+	public void paint(Graphics g) {
+		int sx, sy;
 		//System.out.println("너비 : " + eWidth + ", 높이 : " + eHeight + ", 나는 " + enemyImg[imgIndex]);
 		switch (imgIndex) {
 		case 0:
 			sx = ((cnt / 8) % 7) * eWidth;
 			sy = 0;
-			g.drawImage(enemyImg[imgIndex], 0, 0, eWidth, eHeight, sx, sy, sx + eWidth, sy + eHeight, gamePanel);
+			g.drawImage(enemyImg[imgIndex], dis.x, dis.y, dis.x + eWidth, dis.y + eHeight, sx, sy, sx + eWidth, sy + eHeight, gamePanel);
 			break;
 		case 1:
-			g.drawImage(enemyImg[imgIndex], 0, 0, eWidth, eHeight, gamePanel);
+			g.drawImage(enemyImg[imgIndex], dis.x, dis.y, eWidth, eHeight, gamePanel);
 			break;
 		case 2:// 위치 네우로이
 			switch (mode) {
@@ -404,17 +402,17 @@ public class Enemy extends JLabel {
 			case 3:// 위로 이동
 				sx = 0;
 				sy = 0;
-				g.drawImage(enemyImg[imgIndex], 0, 0, eWidth, eHeight, sx, sy, sx + eWidth, sy + eHeight, gamePanel);				
+				g.drawImage(enemyImg[imgIndex], dis.x, dis.y, dis.x + eWidth, dis.y + eHeight, sx, sy, sx + eWidth, sy + eHeight, gamePanel);				
 				break;
 			case 5:// 뒤로 돌아 퇴장
 				sx = 72;
 				sy = 0;
-				g.drawImage(enemyImg[imgIndex], 0, 0, eWidth, eHeight, sx, sy, sx + eWidth, sy + eHeight, gamePanel);
+				g.drawImage(enemyImg[imgIndex], dis.x, dis.y, dis.x + eWidth, dis.y + eHeight, sx, sy, sx + eWidth, sy + eHeight, gamePanel);
 				break;
 			case 4:// 정지해서 손을 앞으로 내밀고 수평으로 총알 발사
 				sx = 36;
 				sy = 0;
-				g.drawImage(enemyImg[imgIndex], 0, 0, eWidth, eHeight, sx, sy, sx + eWidth, sy + eHeight, gamePanel);
+				g.drawImage(enemyImg[imgIndex], dis.x, dis.y, dis.x + eWidth, dis.y + eHeight, sx, sy, sx + eWidth, sy + eHeight, gamePanel);
 				break;
 			}
 		default:

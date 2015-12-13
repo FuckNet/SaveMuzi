@@ -7,7 +7,7 @@ import java.awt.Toolkit;
 
 import javax.swing.JLabel;
 
-public class Bullet extends JLabel {
+public class Bullet extends Object{
 
 	private static final int BWIDTH = 15, BHEIGHT = 15;
 	// 게임에 등장하는 총알을 처리하기 위한 클래스
@@ -15,6 +15,7 @@ public class Bullet extends JLabel {
 	Point dis;// 총알의 표시 좌표. 실제 좌표보다 *100 상태이다.
 	Point pos;// 총알의 계산 좌표. 실제 좌표보다 *100 상태이다.
 	Point _pos;// 총알의 직전 좌표
+	Point center;
 	int degree;// 총알의 진행 방향 (각도)
 	// 총알의 진행 방향은 x, y 증가량으로도 표시 가능하다. 하지만 그 경우 정밀한 탄막 구현이 어려워진다.
 	int speed;// 총알의 이동 속도
@@ -33,12 +34,12 @@ public class Bullet extends JLabel {
 		pos = new Point(x, y);
 		dis = new Point(x / 100, y / 100);
 		_pos = new Point(x, y);
+		center = new Point(dis.x + BWIDTH/2, dis.y + BHEIGHT/2);
 		this.imgIndex = img_num;
 		this.from = from;
 		this.degree = degree;
 		this.speed = speed;
 		this.power = power;
-		this.setSize(BWIDTH, BHEIGHT);
 	}
 
 	public void move() {
@@ -47,14 +48,14 @@ public class Bullet extends JLabel {
 		pos.y -= (speed * Math.cos(Math.toRadians(degree)) * 100);
 		dis.x = pos.x / 100;
 		dis.y = pos.y / 100;
-		setLocation(dis.x, dis.y);
+		center.x = dis.x + BWIDTH / 2;
+		center.y = dis.y + BHEIGHT / 2;
 		// if(pos.x<0||pos.y>gScreenWidth*100||pos.y<0||pos.y>gScreenHeight*100)
 		// ebullet[i].pic=255;
 	}
 
-	@Override
-	public void paintComponent(Graphics g) {
-		g.drawImage(bulletImg[imgIndex], 0, 0, BWIDTH, BHEIGHT, null);
+	public void paint(Graphics g) {
+		g.drawImage(bulletImg[imgIndex], dis.x, dis.y, BWIDTH, BHEIGHT, null);
 		// g.drawImage(bulletImg[imgIndex], 0, 0, BWIDTH, BHEIGHT, null);
 	}
 }
