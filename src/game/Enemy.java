@@ -80,7 +80,7 @@ public class Enemy extends Object {
       case 0:// 큐브 네우로이 전용 셋팅
          break;
       case 1:// 보스 전용 셋팅
-         life = 100 + 20 * level;
+         life = 150 + 20 * level;
          mode = 0;
          hitrange = 12000;
          break;

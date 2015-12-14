@@ -134,7 +134,7 @@ public class Player {
          if(imgIndex == 6) {
             if(smThread.cnt % 4 == 0 && isShoot) {
                isShoot = false;
-               Bullet shoot = new Bullet(x+5000, y+4000, 0, 0, 270, 16, power);
+               Bullet shoot = new Bullet(x+5000, y+4000, power-1, 0, 270, 16, power);
                //gamePanel.add(shoot);
                bullets.add(shoot);
             }
@@ -154,6 +154,10 @@ public class Player {
       if(y>SMFrame.SCREEN_HEIGHT * 100-10000) y=SMFrame.SCREEN_HEIGHT * 100-10000;
       center.x = x/100 + PWIDTH/2;
       center.y = y/100 + PHEIGHT/2;
+   }
+   
+   public void powerUp() {
+	   power = 2;
    }
    
    public void setDegree(int degree) {
