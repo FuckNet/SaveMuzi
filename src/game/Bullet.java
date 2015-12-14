@@ -7,6 +7,7 @@ import java.awt.Toolkit;
 
 import javax.swing.JLabel;
 
+// Bullet
 public class Bullet extends Object{
 
 	private static final int BWIDTH = 15, BHEIGHT = 15;

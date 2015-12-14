@@ -9,6 +9,7 @@ import network.SMNet;
 import network.SMQueue;
 import superPanel.ReceiveJPanel;
 
+// GamePanel
 public class GamePanel extends ReceiveJPanel {
 
 	private SMFrame smFrame;

@@ -9,6 +9,7 @@ import javax.swing.JLabel;
 
 import main.SMFrame;
 
+//Enemy
 public class Enemy extends Object {
    // 게임에 등장하는 적 캐릭터 관리 클래스
    private static int maxPlayerNum;

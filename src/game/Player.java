@@ -9,6 +9,7 @@ import java.util.Vector;
 
 import main.SMFrame;
 
+//Player
 public class Player {
    
    private static final int PWIDTH = 70, PHEIGHT = 70;

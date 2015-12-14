@@ -13,7 +13,7 @@ import lobby.LobbyPanel;
 import network.SMNet;
 import room.RoomPanel;
 
-//기본 윈도우를 형성하는 프레임을 만든다
+//기본 윈도우를 형성하는 프레임을 만든다아
 public class SMFrame extends JFrame {
    public static final int SCREEN_WIDTH = 1024, SCREEN_HEIGHT = 768;
 

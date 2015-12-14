@@ -5,6 +5,7 @@ import java.awt.Image;
 import java.awt.Point;
 import java.awt.Toolkit;
 
+//Effect
 public class Effect extends Object {
 	// 폭발 등의 이펙트 관리 클래스
 	private Point pos;

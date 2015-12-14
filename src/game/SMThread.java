@@ -8,6 +8,7 @@ import main.SMFrame;
 import network.SMNet;
 import network.SMQueue;
 
+//SMThread
 public class SMThread extends Thread {
 
 	// private GameScreen gameScreen;

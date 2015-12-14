@@ -5,6 +5,7 @@ import java.awt.Image;
 import java.awt.Point;
 import java.awt.Toolkit;
 
+// Item
 public class Item extends Object {
 	// 아이템 관리 클래스
 	protected Point pos;

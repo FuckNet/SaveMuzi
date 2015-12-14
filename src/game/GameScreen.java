@@ -11,6 +11,7 @@ import java.util.Vector;
 import main.SMFrame;
 import network.SMNet;
 
+//GameScreen
 public class GameScreen extends Canvas {
 	
 	private Player[] players;
