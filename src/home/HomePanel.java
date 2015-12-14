@@ -22,7 +22,7 @@ public class HomePanel extends ReceiveJPanel {
 	private static final String PUSHBAR = "res/foreground/pushSpace.png";
 
 	private Thread th;
-	
+
 	private SMNet smNet;
 	private SMFrame smFrame;
 	private Image backgroundHome;
@@ -38,7 +38,7 @@ public class HomePanel extends ReceiveJPanel {
 		setLayout(null);
 		this.smFrame = smFrame;
 		smNet = smFrame.getSMNet();
-		
+
 		loginPanel = new LoginPanel(smNet, this);
 		loginPanel.setLocation((smFrame.getWidth() - loginPanel.getWidth()) / 2,
 				(smFrame.getHeight() - loginPanel.getHeight()) * 3 / 5);
@@ -72,42 +72,49 @@ public class HomePanel extends ReceiveJPanel {
 		add(logoLabel);
 		addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
+			public void keyReleased(KeyEvent e) {
 				th.interrupt();
 				remove(pushBarLabel);
-				showLogin();		
+				showLogin();
+				loginPanel.loadUserInfo();
 			}
 		});
 	}
 
 	// Space Bar 입력을 받을 때 Login창을 띄운다.
-	   public void start() {
-		      th = new Thread(new Runnable() {
-		         public void run() {
-		            while (true) {
-		               try {
-		                  add(pushBarLabel);
-		                  for (int i = 0; i < 15; i++) { // sleep 도중 키 이벤트 발생이 안되는
-		                                          // 것을 방지하기 위해 잘게 쪼갬
-		                     Thread.sleep(10);
-		                  }
-		                  repaint();
-		                  remove(pushBarLabel);
-		                  for (int i = 0; i < 15; i++) {
-		                     Thread.sleep(10);
-		                  }
-		                  repaint();
-		               } catch (InterruptedException e) {
-		                  break;
-		               }
-		            }
-		         }
-		      });
-		      
-		      th.start();
-		   }
+	public void start() {
+		th = new Thread(new Runnable() {
+			public void run() {
+				while (true) {
+					try {
+						add(pushBarLabel);
+						for (int i = 0; i < 15; i++) { // sleep 도중 키 이벤트 발생이 안되는
+							// 것을 방지하기 위해 잘게 쪼갬
+							Thread.sleep(10);
+						}
+						repaint();
+						remove(pushBarLabel);
+						for (int i = 0; i < 15; i++) {
+							Thread.sleep(10);
+						}
+						repaint();
+					} catch (InterruptedException e) {
+						break;
+					}
+				}
+			}
+		});
 
-	void showLogin() {
+		th.start();
+	}
+
+	public void loadUserInfo() {
+		loginPanel.loadUserInfo();
+	}
+	public void resetAutoLogin() {
+		loginPanel.resetAutoLogin();
+	}
+	public void showLogin() {
 		add(loginPanel);
 		repaint();
 		loginPanel.tf_ID.setText("");
@@ -139,9 +146,9 @@ public class HomePanel extends ReceiveJPanel {
 			JOptionPane.showMessageDialog(this, "회원가입 완료!", "Message", JOptionPane.ERROR_MESSAGE);
 			signUpPanel.tf_ID.setText("");
 			signUpPanel.tf_PW.setText("");
-			signUpPanel.tf_PWC.setText("");		
-		} else if (splitMsg[0].equals("/EXTID")) {		
-			JOptionPane.showMessageDialog(this, "이미 존재하는 아이디입니다.", "Message", JOptionPane.ERROR_MESSAGE);				
+			signUpPanel.tf_PWC.setText("");
+		} else if (splitMsg[0].equals("/EXTID")) {
+			JOptionPane.showMessageDialog(this, "이미 존재하는 아이디입니다.", "Message", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 

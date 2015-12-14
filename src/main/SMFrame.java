@@ -50,39 +50,45 @@ public class SMFrame extends JFrame {
 		contentPane.add("gamePanel", gamePanel);
 
 		setVisible(true);
-		changePanel("homePanel");
+		sequenceControl("homePanel", 0);
 
 		homePanel.start();
 	}
 
 	public void sequenceControl(String panelName, int arg0) {
-      // arg0는 패널마다 의미하는 바가 다름
-      switch(panelName) {
-      case "homePanel":
-         changePanel(panelName);
-         break;
-      case "lobbyPanel":
-         smNet.toLobbyPanel();
-         smNet.setStateToLobby();
-         for(int i=0; i<arg0; i++)
-        	 lobbyPanel.addRoom();
-         changePanel(panelName);
-         break;
-      case "roomPanel":
-         smNet.toRoomPanel();
-         smNet.setStateToRoom();
-         roomPanel.setRoomNum(arg0);
-         changePanel(panelName);
-         break;
-      case "gamePanel":
-         gamePanel.setMaxPlayerNum(arg0);
-         gamePanel.gameStart();
-         smNet.toGamePanel();
-         smNet.setStateToGame();
-         changePanel(panelName);
-         break;
-      }
-   }
+		// arg0는 패널마다 의미하는 바가 다름
+		switch (panelName) {
+		case "homePanel":
+			if (arg0 == 1) { // 로그아웃 버튼으로 홈으로 온 경우
+				homePanel.resetAutoLogin();
+			}
+			smNet.toHomePanel();
+			smNet.setStateToHome();
+			changePanel(panelName);
+			break;
+		case "lobbyPanel":
+			smNet.toLobbyPanel();
+			smNet.setStateToLobby();
+			for (int i = 0; i < arg0; i++)
+				lobbyPanel.addRoom();
+			changePanel(panelName);
+			repaint();
+			break;
+		case "roomPanel":
+			smNet.toRoomPanel();
+			smNet.setStateToRoom();
+			roomPanel.setRoomNum(arg0);
+			changePanel(panelName);
+			break;
+		case "gamePanel":
+			gamePanel.setMaxPlayerNum(arg0);
+			gamePanel.gameStart();
+			smNet.toGamePanel();
+			smNet.setStateToGame();
+			changePanel(panelName);
+			break;
+		}
+	}
 
 	public void changePanel(String panelName) {
 		layoutManager.show(contentPane, panelName);

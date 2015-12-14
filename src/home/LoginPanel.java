@@ -25,7 +25,7 @@ import javax.swing.event.ChangeListener;
 import main.SMFrame;
 import network.SMNet;
 
-public class LoginPanel extends JPanel{
+public class LoginPanel extends JPanel {
 	private static final String BG_LOGIN = "res/background/backgroundLogin.png";
 	private static final String FILE_NAME = "res/login/user.txt";
 
@@ -35,7 +35,7 @@ public class LoginPanel extends JPanel{
 
 	private HomePanel homePanel;
 	private SMNet smNet;
-	
+
 	JTextField tf_ID; // ID를 입력받을곳
 	JTextField tf_PW; // IP를 입력받을곳
 	JCheckBox checkSave; // 아이디, 비번 저장 체크박스
@@ -50,15 +50,22 @@ public class LoginPanel extends JPanel{
 	String isAuto;
 	public static String userID;
 	public static String userPW;
-	
+
 	public LoginPanel(SMNet smNet, HomePanel homePanel) {
-		loadUserInfo();
 		this.smNet = smNet;
 		this.homePanel = homePanel;
 		backgroundLogin = Toolkit.getDefaultToolkit().getImage(BG_LOGIN);
 		initGUI();
+		//loadUserInfo();
 	}
-	private void loadUserInfo() {
+
+	public void resetAutoLogin() {
+		isAuto = "false";
+		checkAuto.setSelected(false);
+		writeUserInfo();
+	}
+	
+	public void loadUserInfo() {
 		try {
 			in = new BufferedReader(new FileReader(FILE_NAME));
 
@@ -74,7 +81,6 @@ public class LoginPanel extends JPanel{
 				if (isAuto.equals("true")) {
 					checkAuto.setSelected(true);
 					logIn(userID, userPW);
-					setVisible(false);
 				}
 			}
 			in.close();
@@ -83,13 +89,14 @@ public class LoginPanel extends JPanel{
 			System.exit(1);
 		}
 	}
+
 	public void initGUI() { // 화면 구성
 		setBounds(0, 0, WIDTH, HEIGHT);
 		setBorder(new EmptyBorder(5, 5, 5, 5));
 		setLayout(null);
 		setBackground(new Color(100, 200, 255));
 
-		JLabel lblLogo = new JLabel("Hansung Talk");
+		JLabel lblLogo = new JLabel("Save Muzi");
 		lblLogo.setBounds(60, 30, 170, 34);
 		lblLogo.setFont(new Font("Serif", Font.PLAIN, 30));
 		add(lblLogo);
@@ -145,8 +152,9 @@ public class LoginPanel extends JPanel{
 			@Override
 			public void stateChanged(ChangeEvent arg0) {
 				isAuto = Boolean.toString(checkAuto.isSelected());
-				if (isAuto.equals("false"))
+				if (isAuto.equals("false")) {
 					writeUserInfo();
+				}
 			}
 		});
 
@@ -154,8 +162,9 @@ public class LoginPanel extends JPanel{
 			@Override
 			public void stateChanged(ChangeEvent arg0) {
 				isSave = Boolean.toString(checkSave.isSelected());
-				if (isSave.equals("false"))
+				if (isSave.equals("false")) {
 					writeUserInfo();
+				}
 			}
 
 		});
@@ -174,11 +183,12 @@ public class LoginPanel extends JPanel{
 			out.write(userPW);
 			out.newLine();
 			out.close();
-		}catch(Exception e) {
+		} catch (Exception e) {
 			System.err.println(e);
-			System.exit(1);			
+			System.exit(1);
 		}
 	}
+
 	class ConnectAction implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent event) {
@@ -197,7 +207,7 @@ public class LoginPanel extends JPanel{
 	}
 
 	public void logIn(String id, String pw) {
-		smNet.sendMSG("/LOGIN "+ id + " " + pw);
+		smNet.sendMSG("/LOGIN " + id + " " + pw);
 	}
 
 	class SignupAction implements ActionListener {
@@ -207,7 +217,7 @@ public class LoginPanel extends JPanel{
 			homePanel.showSignup();
 		}
 	}
-	
+
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		g.drawImage(backgroundLogin, 0, 0, getWidth(), getHeight(), this);

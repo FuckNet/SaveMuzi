@@ -29,6 +29,7 @@ public class LobbyPanel extends ReceiveJPanel {// implements Runnable{
 
 	private Vector<RoomInfo> rooms = new Vector<RoomInfo>();
 	private JButton createRoomBtn;
+	private JButton logoutBtn;
 	private JTextArea chatTextArea;
 	private JTextField chatTextField;
 
@@ -50,6 +51,17 @@ public class LobbyPanel extends ReceiveJPanel {// implements Runnable{
 			}
 		});
 		add(createRoomBtn);
+		logoutBtn = new JButton("·Î±×¾Æ¿ô");
+		logoutBtn.setBounds(smFrame.getWidth() * 4 / 5, 0, smFrame.getWidth() * 1 / 5,
+				smFrame.getHeight() * 1 / 6);
+		logoutBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				smFrame.sequenceControl("homePanel", 1);
+				smNet.sendMSG("/LOGOUT");
+			}
+		});
+		add(logoutBtn);
 
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(smFrame.getWidth() * 4 / 7, smFrame.getHeight() * 1 / 5, smFrame.getWidth() * 3 / 8,
