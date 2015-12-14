@@ -5,7 +5,6 @@ import java.awt.Image;
 import java.awt.Point;
 import java.awt.Toolkit;
 
-// Item
 public class Item extends Object {
 	// 아이템 관리 클래스
 	protected Point pos;
@@ -17,11 +16,12 @@ public class Item extends Object {
 	
 	private static SMThread smThread;
 	
+	public static final int ITEMCOUNT = 4;
 	public static final int IWIDTH = 36;
 	public static final int IHEIGHT = 36;
 
 
-	static Image itemImg[] = new Image[3];
+	static Image itemImg[] = new Image[Item.ITEMCOUNT];
 
 	public static void itemInit(SMThread smThread) {
 		for (int i = 0; i < itemImg.length; i++) {
@@ -60,6 +60,9 @@ public class Item extends Object {
 	
 	public void paint(Graphics g) {
 		int sx = ((smThread.cnt/4)%7)*36;
-		g.drawImage(itemImg[kind], dis.x, dis.y, dis.x + IWIDTH, dis.y + IHEIGHT, sx, 0, sx+IWIDTH, IHEIGHT, null);
+		if(kind >= 0 && kind <= 2)
+			g.drawImage(itemImg[kind], dis.x, dis.y, dis.x + IWIDTH, dis.y + IHEIGHT, sx, 0, sx+IWIDTH, IHEIGHT, null);
+		else if(kind == 3)
+			g.drawImage(itemImg[kind], dis.x, dis.y, dis.x + IWIDTH, dis.y + IHEIGHT, 0, 0, 30, 29, null);
 	}
 }

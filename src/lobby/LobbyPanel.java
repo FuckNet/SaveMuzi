@@ -105,8 +105,10 @@ public class LobbyPanel extends ReceiveJPanel {// implements Runnable{
 			}
 		}
 		else if (splitMsg[0].equals("/RMROOM")) {
-			System.out.println("방지움 메세지 받음\n");
 			removeRoom(Integer.parseInt(splitMsg[1])-1);
+		}
+		else if (splitMsg[0].equals("/GAMESTARTROOM")) {
+			rooms.get(Integer.parseInt(splitMsg[1])-1).gameStart();
 		}
 		else {
 			chatTextArea.append(msg + "\n");

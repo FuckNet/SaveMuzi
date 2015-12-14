@@ -116,6 +116,12 @@ public class RoomPanel extends ReceiveJPanel {
 		else if (splitMsg[0].equals("/ENTERUSER")) {
 			addUser(splitMsg[1]);
 		}
+		else if (splitMsg[0].equals("/RMROOM")) {
+			int idx = Integer.parseInt(splitMsg[1])-1;
+			remove(users.get(idx));
+			users.removeElementAt(idx);
+			repaint();
+		}
 		else {
 			chatTextArea.append(msg + "\n");
 			chatTextArea.setCaretPosition(chatTextArea.getText().length());

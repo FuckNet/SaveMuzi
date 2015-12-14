@@ -78,7 +78,6 @@ public class SMThread extends Thread {
 		smQueue.clear();
 		try {
 			while (true) {
-
 				preTime = System.currentTimeMillis();
 
 				// Thread.sleep(50);
