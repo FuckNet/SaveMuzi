@@ -84,6 +84,7 @@ public class SMThread extends Thread {
             // gamePanel.repaint();
             seed = (seed+1) % 255;
             GamePanel.rnd = new Random(seed);
+            System.out.println(gameCnt + " " + seed);
             process();
             keyProcess();
 
@@ -95,8 +96,8 @@ public class SMThread extends Thread {
             // Thread.sleep(100);
             // System.out.println(preTime);
             // gamePanel.repaint();
-            if(gameCnt%20 == 0) {
-            	smNet.sendMSG("LOC " + playerNo + " " + players[playerNo].getX() + " " + players[playerNo].getY() + "/");
+            if(gameCnt%2 == 0) {
+            	smNet.sendMSGUDP("LOC " + playerNo + " " + players[playerNo].getX() + " " + players[playerNo].getY() + "/");
             }
             gameScreen.repaint();
             if (System.currentTimeMillis() - preTime < delay)
@@ -150,14 +151,12 @@ public class SMThread extends Thread {
       String msg = smQueue.getMSG();
       if (msg == null || msg.equals(""))
          return;
-
       String splitMsg[] = msg.split(" ");
       int playerNum;
       for (int i = 0; i < splitMsg.length; i++) {
          playerNum = Integer.parseInt(splitMsg[0]);
          players[playerNum].setState(Integer.parseInt(splitMsg[2]), splitMsg[1].equals("P"));
       }
-
    }
 
    public void process_ENEMY() {

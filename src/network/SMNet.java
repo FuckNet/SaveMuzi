@@ -62,7 +62,7 @@ public class SMNet {
 	public void setStateToHome() {
 		netState = NETSTATE.Home;
 	}
-	
+
 	public void setStateToLobby() {
 		netState = NETSTATE.Lobby;
 	}
@@ -72,16 +72,16 @@ public class SMNet {
 	}
 
 	public void setStateToGame() {
-	      // UDP
-	      try {
-	         this.udpSocket = new MulticastSocket(udpPort);
-	         this.udpIP = InetAddress.getByName(UDP_IP);
-	         udpSocket.joinGroup(udpIP); // 지정한 멀티캐스트 아이피 대역에 합류.
-	      } catch (IOException e) {
-	         // TODO Auto-generated catch block
-	         e.printStackTrace();
-	      }
-	      netState = NETSTATE.Game;
+		// UDP
+		try {
+			this.udpSocket = new MulticastSocket(udpPort);
+			this.udpIP = InetAddress.getByName(UDP_IP);
+			udpSocket.joinGroup(udpIP); // 지정한 멀티캐스트 아이피 대역에 합류.
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		netState = NETSTATE.Game;
 	}
 
 	public void setHomePanel(HomePanel homePanel) {
@@ -99,11 +99,11 @@ public class SMNet {
 	public void setRoomPanel(RoomPanel roomPanel) {
 		this.roomPanel = roomPanel;
 	}
-	
+
 	public void toHomePanel() {
 		this.panel = this.homePanel;
 	}
-	
+
 	public void toLobbyPanel() {
 		this.panel = this.lobbyPanel;
 	}
@@ -205,36 +205,32 @@ public class SMNet {
 
 	public void sendToServer(String str) {
 		String str2 = playerNo + " " + str + "/";
-		sendMSG(str2);
+		sendMSGUDP(str2);
 	}
 
 	public void sendMSG(String str) { // 서버로 메세지를 보내는 메소드
-		switch (netState) {
-		case Home:
-		case Lobby:
-		case Room:
-			try {
-				byte[] bb;
-				bb = str.getBytes();
-				dos.write(bb);
-				// .writeUTF(str); dos.flush();
-			} catch (IOException e) {
-				System.out.println("메세지 송신 에러!!");
-				return;
-			}
-			break;
-		case Game:
-			byte[] buffer = str.getBytes();
-			DatagramPacket packet = new DatagramPacket(buffer, buffer.length, udpIP, udpPort);
-			try {
-				udpSocket.send(packet);
-				System.out.println("보낸 메세지 : " + str);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			break;
+		try {
+			byte[] bb;
+			bb = str.getBytes();
+			dos.write(bb);
+			// .writeUTF(str); dos.flush();
+		} catch (IOException e) {
+			System.out.println("메세지 송신 에러!!");
+			return;
 		}
 	}
+
+	public void sendMSGUDP(String str) {
+		byte[] buffer = str.getBytes();
+		DatagramPacket packet = new DatagramPacket(buffer, buffer.length, udpIP, udpPort);
+		try {
+			udpSocket.send(packet);
+			System.out.println("보낸 메세지 : " + str);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
 	public int getPlayerNum() {
 		return playerNo;
 	}

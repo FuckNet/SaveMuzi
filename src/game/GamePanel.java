@@ -1,12 +1,7 @@
 package game;
 
-import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.Toolkit;
 import java.util.Random;
 import java.util.Vector;
-
-import javax.swing.JComponent;
 
 import listener.SMKeyListener;
 import main.SMFrame;

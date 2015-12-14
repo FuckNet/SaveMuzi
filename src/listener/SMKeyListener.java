@@ -27,7 +27,6 @@ public class SMKeyListener extends KeyAdapter{
     }
     @Override
     public void keyPressed(final KeyEvent e) {
-    	System.out.println("Å°´­¸²\n");
     	String sendStr;
     	if(keys.indexOf(e.getKeyCode()) == -1) {
             keys.add(e.getKeyCode());

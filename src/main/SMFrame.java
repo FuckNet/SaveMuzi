@@ -117,7 +117,7 @@ public class SMFrame extends JFrame {
    class ExitListener implements WindowListener {
       @Override
       public void windowClosing(WindowEvent e) {
-         //smNet.sendMSGTCP("/EXIT");
+         smNet.sendMSG("/EXIT");
          System.out.println("프로그램 종료");
          System.exit(0);
       }
