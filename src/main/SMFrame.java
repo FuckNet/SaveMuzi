@@ -32,7 +32,8 @@ public class SMFrame extends JFrame {
       setLayout(layoutManager);
       setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
       setResizable(false);
-
+      addWindowListener(new ExitListener());
+      
       smNet = new SMNet();
       homePanel = new HomePanel(this);
       lobbyPanel = new LobbyPanel(this);

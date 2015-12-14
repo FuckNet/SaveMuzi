@@ -22,11 +22,15 @@ public class Bullet extends Object{
 	int imgIndex;// 총알의 이미지 번호
 	int from;// 총알을 누가 발사했는가
 	int power; // 총알의 파워
-	static Image bulletImg[] = new Image[4];
+	static Image bulletImg[] = new Image[3];
+	static Image eBulletImg[] = new Image[1];
 
 	public static void bulletInit() {
 		for (int i = 0; i < bulletImg.length; i++) {
 			bulletImg[i] = Toolkit.getDefaultToolkit().getImage("res/game/bullet_" + i + ".png");
+		}
+		for (int i = 0; i < eBulletImg.length; i++) {
+			eBulletImg[i] = Toolkit.getDefaultToolkit().getImage("res/game/ebullet_" + i + ".png");
 		}
 	}
 
@@ -55,7 +59,10 @@ public class Bullet extends Object{
 	}
 
 	public void paint(Graphics g) {
-		g.drawImage(bulletImg[imgIndex], dis.x, dis.y, BWIDTH, BHEIGHT, null);
+		if(from == 0)
+			g.drawImage(bulletImg[imgIndex], dis.x, dis.y, BWIDTH, BHEIGHT, null);
+		else
+			g.drawImage(eBulletImg[imgIndex], dis.x, dis.y, BWIDTH, BHEIGHT, null);
 		// g.drawImage(bulletImg[imgIndex], 0, 0, BWIDTH, BHEIGHT, null);
 	}
 }

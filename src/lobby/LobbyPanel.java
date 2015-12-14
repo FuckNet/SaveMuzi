@@ -104,6 +104,10 @@ public class LobbyPanel extends ReceiveJPanel {// implements Runnable{
 				smFrame.roomPanel.addUser(splitMsg[i]);
 			}
 		}
+		else if (splitMsg[0].equals("/RMROOM")) {
+			System.out.println("방지움 메세지 받음\n");
+			removeRoom(Integer.parseInt(splitMsg[1])-1);
+		}
 		else {
 			chatTextArea.append(msg + "\n");
 			chatTextArea.setCaretPosition(chatTextArea.getText().length());
@@ -125,6 +129,11 @@ public class LobbyPanel extends ReceiveJPanel {// implements Runnable{
 		});
 		add(room);
 		rooms.add(room);
+		repaint();
+	}
+	public void removeRoom(int roomIdx) {
+		remove(rooms.get(roomIdx));
+		rooms.removeElementAt(roomIdx);
 		repaint();
 	}
 

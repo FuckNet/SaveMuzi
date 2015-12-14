@@ -233,10 +233,7 @@ public class SMThread extends Thread {
 							// 명중판정되는 범위가 다르다
 							ebuff.life -= buff.power;
 							if (ebuff.life <= 0) {// 적 라이프 감소
-								if (ebuff.kind == 1) {
-									if (gameCnt < 2100)
-										gameCnt = 2100;
-								}
+								Item tem;
 								removeObject(enemies, enemies.get(j));
 								// enemies.remove(j);// 적 캐릭터 소거
 								expl = new Effect(0, ebuff.pos.x, buff.pos.y - Effect.EFHEIGHT / 2, 0);
@@ -245,14 +242,21 @@ public class SMThread extends Thread {
 								// Item tem=new Item(ebuff.pos.x, buff.pos.y,
 								// RAND(1,(level+1)*20)/((level+1)*20));//난수 결과가
 								// 최대값일 때만 생성되는 아이템이 1이 된다
-								int itemKind = GamePanel.RAND(1, 100);
-								Item tem;
-								if (itemKind <= 70)
-									tem = new Item(ebuff.pos.x, buff.pos.y, 0);
-								else if (itemKind <= 95)
-									tem = new Item(ebuff.pos.x, buff.pos.y, 2);
-								else
-									tem = new Item(ebuff.pos.x, buff.pos.y, 1);
+								if (ebuff.kind == 1) {
+									if (gameCnt < 2100)
+										gameCnt = 2100;
+									tem = new Item(ebuff.pos.x, buff.pos.y, 3);
+								} else {
+									int itemKind = GamePanel.RAND(1, 100);
+									if (itemKind <= 65)
+										tem = new Item(ebuff.pos.x, buff.pos.y, 0);
+									else if (itemKind <= 90)
+										tem = new Item(ebuff.pos.x, buff.pos.y, 2);
+									else if (itemKind <= 95)
+										tem = new Item(ebuff.pos.x, buff.pos.y, 3);
+									else
+										tem = new Item(ebuff.pos.x, buff.pos.y, 1);
+								}
 								addObject(items, tem);
 								// items.add(tem);
 							}
@@ -282,6 +286,7 @@ public class SMThread extends Thread {
 							int temp = players[k].getLife() - buff.power;
 							players[k].setLife(temp);
 							removeObject(bullets, bullets.get(i));
+							players[k].powerDown();
 							System.out.println("라이프 1 감소 -> " + temp);
 							if (temp <= 0) {
 								status = Status.GameOver;
@@ -448,10 +453,10 @@ public class SMThread extends Thread {
 							if (ebuff == null)
 								continue;// 만일 해당 인덱스에 적 캐릭터가 생성되어있지 않을 경우를 대비
 							if (ebuff.kind == 1) {// 해당 인덱스에 할당된 적 캐릭터가 보스 캐릭터일
-								// 경우는 전멸에 해당하지 않고 HP만 반으로
+								// 경우는 전멸에 해당하지 않고 HP 10 감소
 								// 줄인다. 1 이하라면 1.
 								score += 300;
-								ebuff.life = ebuff.life / 2;
+								ebuff.life = ebuff.life - 10;
 								if (ebuff.life <= 1)
 									ebuff.life = 1;
 								continue;
@@ -472,10 +477,12 @@ public class SMThread extends Thread {
 								// 최대값일 때만 생성되는 아이템이 1이 된다
 								int itemKind = GamePanel.RAND(1, 100);
 								Item tem;
-								if (itemKind <= 70)
+								if (itemKind <= 65)
 									tem = new Item(ebuff.pos.x, buff.pos.y, 0);
-								else if (itemKind <= 95)
+								else if (itemKind <= 90)
 									tem = new Item(ebuff.pos.x, buff.pos.y, 2);
+								else if (itemKind <= 95)
+									tem = new Item(ebuff.pos.x, buff.pos.y, 3);
 								else
 									tem = new Item(ebuff.pos.x, buff.pos.y, 1);
 								addObject(items, tem);
@@ -503,6 +510,9 @@ public class SMThread extends Thread {
 							removeObject(bullets, bbuff);
 							// bullets.remove(bbuff);
 						}
+						break;
+					case 3:
+						players[j].powerUp();
 						break;
 					}
 					removeObject(items, items.get(i));
