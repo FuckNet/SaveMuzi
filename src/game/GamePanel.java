@@ -54,6 +54,10 @@ public class GamePanel extends ReceiveJPanel {
 	public void init() {
 		bullets = new Vector<Object>();
 	}
+	
+	public SMNet getSMNet() {
+		return smNet;
+	}
 
 	public void addBullet(Bullet bullet) {
 		//add(bullet);
@@ -93,7 +97,19 @@ public class GamePanel extends ReceiveJPanel {
 		splitSlash = msg.split("/");
 		int count = splitSlash.length;
 		for (int i = 0; i < count; i++) {
-			smQueue.addMSG(splitSlash[i]);
+			if(splitSlash[i].substring(0, 3).equals("LOC")) {
+				String splitSpace[];
+				int playerNum;
+				int x, y;
+				splitSpace = splitSlash[i].split(" ");
+				playerNum = Integer.parseInt(splitSpace[1]);
+				x = Integer.parseInt(splitSpace[2]);
+				y = Integer.parseInt(splitSpace[3]);
+				p[playerNum].setX(x);
+				p[playerNum].setY(y);
+			}
+			else
+				smQueue.addMSG(splitSlash[i]);
 		}
 	}
 

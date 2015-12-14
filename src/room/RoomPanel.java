@@ -15,8 +15,8 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import game.GamePanel;
+import game.SMThread;
 import home.LoginPanel;
-import lobby.RoomInfo;
 import main.SMFrame;
 import network.SMNet;
 import superPanel.ReceiveJPanel;
@@ -104,6 +104,7 @@ public class RoomPanel extends ReceiveJPanel {
 			smNet.setPlayerNum(Integer.parseInt(splitMsg[1]));
 			smFrame.sequenceControl("gamePanel", Integer.parseInt(splitMsg[2]));
 			GamePanel.rnd = new Random(Long.parseLong(splitMsg[3]));
+			SMThread.seed = Integer.parseInt(splitMsg[3]);
 		}
 		else if (splitMsg[0].equals("/CREATEROOM"))
 			return;

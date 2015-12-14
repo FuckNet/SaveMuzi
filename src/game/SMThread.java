@@ -1,11 +1,11 @@
 package game;
 
+import java.util.Random;
 import java.util.Vector;
-
-import javax.swing.JComponent;
 
 import game.GamePanel.Status;
 import main.SMFrame;
+import network.SMNet;
 import network.SMQueue;
 
 public class SMThread extends Thread {
@@ -20,7 +20,12 @@ public class SMThread extends Thread {
    private Vector<Object> enemies;
    private Vector<Object> effects;
    private Vector<Object> items;
+   private SMNet smNet;
+   
+   private int playerNo;
 
+   public static int seed; 
+   
    // 게임 상태 변수
    private int score;
    private int level;
@@ -42,6 +47,8 @@ public class SMThread extends Thread {
 
    public void setGamePanel(GamePanel gamePanel) {
       this.gamePanel = gamePanel;
+      this.smNet = gamePanel.getSMNet();
+      this.playerNo = smNet.getPlayerNum();
       players = gamePanel.getPlayer();
       bullets = gamePanel.getBullets();
    }
@@ -70,10 +77,13 @@ public class SMThread extends Thread {
       smQueue.clear();
       try {
          while (true) {
+        	 
             preTime = System.currentTimeMillis();
 
             // Thread.sleep(50);
             // gamePanel.repaint();
+            seed = (seed+1) % 255;
+            GamePanel.rnd = new Random(seed);
             process();
             keyProcess();
 
@@ -85,6 +95,9 @@ public class SMThread extends Thread {
             // Thread.sleep(100);
             // System.out.println(preTime);
             // gamePanel.repaint();
+            if(gameCnt%20 == 0) {
+            	smNet.sendMSG("LOC " + playerNo + " " + players[playerNo].getX() + " " + players[playerNo].getY() + "/");
+            }
             gameScreen.repaint();
             if (System.currentTimeMillis() - preTime < delay)
                Thread.sleep(delay - System.currentTimeMillis() + preTime);

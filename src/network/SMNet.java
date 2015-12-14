@@ -235,6 +235,9 @@ public class SMNet {
 			break;
 		}
 	}
+	public int getPlayerNum() {
+		return playerNo;
+	}
 
 	public void setPlayerNum(int playerNum) {
 		this.playerNo = playerNum;
