@@ -215,7 +215,8 @@ public class SMThread extends Thread {
 		for (int k = 1; k < players.length; k++) {
 			for (i = 0; i < bullets.size(); i++) {
 				buff = (Bullet) (bullets.elementAt(i));
-				buff.move();
+				if(k == 1)
+					buff.move();
 				if (buff.dis.x < 10 || buff.dis.x > SMFrame.SCREEN_WIDTH + 10 || buff.dis.y < 10
 						|| buff.dis.y > SMFrame.SCREEN_HEIGHT + 10) {
 					removeObject(bullets, bullets.get(i));
