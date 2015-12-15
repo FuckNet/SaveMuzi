@@ -80,6 +80,8 @@ public class RoomPanel extends ReceiveJPanel {
 		roomOutBtn.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				smFrame.lobbyPanel.clearTextArea();
+				chatTextArea.setText("");
 				smNet.sendMSG("/ROOMOUT");
 			}
 		});
@@ -179,7 +181,6 @@ public class RoomPanel extends ReceiveJPanel {
 
 	public void addUser(String userID) {
 		UserInfo user = new UserInfo();
-		System.out.println(users.size());
 		user.setLocation(0, UserInfo.HEIGHT * users.size());
 		user.setUserName(userID);
 		users.add(user);

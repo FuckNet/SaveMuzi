@@ -87,6 +87,7 @@ public class LobbyPanel extends ReceiveJPanel {// implements Runnable{
 		logoutBtn.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				chatTextArea.setText("");
 				smFrame.sequenceControl("homePanel", 1);
 				smNet.sendMSG("/LOGOUT");
 			}
@@ -173,5 +174,10 @@ public class LobbyPanel extends ReceiveJPanel {// implements Runnable{
 			remove(rooms.get(i));
 			rooms.remove(i);
 		}
+	}
+
+	public void clearTextArea() {
+		this.chatTextArea.setText("");
+		
 	}
 }
