@@ -246,11 +246,11 @@ public class SMThread extends Thread {
 									tem = new Item(ebuff.pos.x, buff.pos.y, 3);
 								} else {
 									int itemKind = GamePanel.RAND(1, 100);
-									if (itemKind <= 65)
+									if (itemKind <= 20)
 										tem = new Item(ebuff.pos.x, buff.pos.y, 0);
-									else if (itemKind <= 90)
+									else if (itemKind <= 50)
 										tem = new Item(ebuff.pos.x, buff.pos.y, 2);
-									else if (itemKind <= 95)
+									else if (itemKind <= 80)
 										tem = new Item(ebuff.pos.x, buff.pos.y, 3);
 									else
 										tem = new Item(ebuff.pos.x, buff.pos.y, 1);
