@@ -122,6 +122,9 @@ public class LobbyPanel extends ReceiveJPanel {// implements Runnable{
 		else if (splitMsg[0].equals("/GAMESTARTROOM")) {
 			rooms.get(Integer.parseInt(splitMsg[1])-1).gameStart();
 		}
+		else if (splitMsg[0].equals("/ROOMOUT")) {
+			
+		}
 		else {
 			chatTextArea.append(msg + "\n");
 			chatTextArea.setCaretPosition(chatTextArea.getText().length());

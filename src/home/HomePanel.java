@@ -137,7 +137,7 @@ public class HomePanel extends ReceiveJPanel {
 		} else if (splitMsg[0].equals("/WRONGPW")) {
 			JOptionPane.showMessageDialog(this, "비밀번호가 틀립니다.", "Message", JOptionPane.ERROR_MESSAGE);
 		} else if (splitMsg[0].equals("/SUCCESSSIGNUP")) {
-			JOptionPane.showMessageDialog(this, "회원가입 완료!", "Message", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(this, "회원가입 완료!", "Message", JOptionPane.OK_OPTION);
 			signUpPanel.tf_ID.setText("");
 			signUpPanel.tf_PW.setText("");
 			signUpPanel.tf_PWC.setText("");

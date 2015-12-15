@@ -45,6 +45,6 @@ public class RoomInfo extends JPanel {
 		g.drawImage(curImage, 0, 0, getWidth(), getHeight(), this);
 		g.setFont(new Font("¸¼Àº °íµñ", Font.PLAIN, fontSize));
 		g.setColor(Color.LIGHT_GRAY);
-		g.drawString(name, (WIDTH - name.length()*fontSize) / 2, (HEIGHT + fontSize - 10)/2);
+		g.drawString(name, (WIDTH - name.length()*fontSize) / 2, (HEIGHT + fontSize - 10)/2 + 10);
 	}
 }
