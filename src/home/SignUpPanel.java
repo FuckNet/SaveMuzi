@@ -20,8 +20,8 @@ import network.SMNet;
 
 public class SignUpPanel extends JPanel{
 	private static final String BG_LOGIN = "res/background/backgroundLogin.png";
-	private static final int WIDTH = 400;
-	private static final int HEIGHT = 400;
+	private static final int WIDTH = 500;
+	private static final int HEIGHT = 550;
 	private Image backgroundLogin;
 
 	private HomePanel homePanel;
@@ -42,53 +42,58 @@ public class SignUpPanel extends JPanel{
 	}
 	
 	public void initGUI() { // È­¸é ±¸¼º
-		setBounds(100, 100, 288, 392);
+		setBounds(0, 0, WIDTH, HEIGHT);
 		setBorder(new EmptyBorder(5, 5, 5, 5));
 		setBackground(new Color(100,200,255));
 		setLayout(null);
 
 		JLabel lblLogo = new JLabel("Sign Up");
-		lblLogo.setBounds(100, 25, 90, 34);
-		lblLogo.setFont(new Font("Serif", Font.PLAIN, 22));
+		lblLogo.setBounds(100, 60, 400, 100);
+		lblLogo.setFont(new Font("Serif", Font.PLAIN, 100));
 		add(lblLogo);
 		
 		JLabel lblID = new JLabel("ID");
-		lblID.setBounds(60, 77, 90, 34);
+		lblID.setBounds(170, 200, 90, 40);
+		lblID.setFont(new Font("¸¼Àº °íµñ", Font.BOLD, 30));
 		add(lblID);
 
 		tf_ID = new JTextField();
-		tf_ID.setBounds(92, 84, 150, 21);
+		tf_ID.setBounds(220, 208, 150, 30);
+		tf_ID.setSize(150, 30);
 		add(tf_ID);
 		tf_ID.setColumns(10);
 
 		JLabel lblPW = new JLabel("Password");
-		lblPW.setBounds(14, 126, 90, 34);
+		lblPW.setBounds(64, 261, 200, 34);
+		lblPW.setFont(new Font("¸¼Àº °íµñ", Font.BOLD, 30));
 		add(lblPW);
 
 		tf_PW = new JTextField();
 		tf_PW.setColumns(10);
-		tf_PW.setBounds(92, 133, 150, 21);
+		tf_PW.setBounds(220, 268, 150, 30);
 		add(tf_PW);
 		
 		JLabel lblPWC = new JLabel("Password");
-		lblPWC.setBounds(14, 166, 90, 34);
+		lblPWC.setBounds(64, 320, 150, 34);
+		lblPWC.setFont(new Font("¸¼Àº °íµñ", Font.BOLD, 30));
 		add(lblPWC);
 		
 		JLabel lblPWC2 = new JLabel("Confirm");
-		lblPWC2.setBounds(18, 186, 90, 34);
+		lblPWC2.setBounds(73, 345, 150, 34);
+		lblPWC2.setFont(new Font("¸¼Àº °íµñ", Font.BOLD, 30));
 		add(lblPWC2);
 		
 		tf_PWC = new JTextField();
 		tf_PWC.setColumns(10);
-		tf_PWC.setBounds(92, 178, 150, 21);
+		tf_PWC.setBounds(220, 335, 150, 30);
 		add(tf_PWC);
 		
 		btnSignup = new JButton("Sign up");
-		btnSignup.setBounds(46, 240, 186, 30);
+		btnSignup.setBounds(160, 420, 186, 30);
 		add(btnSignup);
 		
 		btnCancel = new JButton("Cancel");
-		btnCancel.setBounds(46, 290, 186, 30);
+		btnCancel.setBounds(160, 470, 186, 30);
 		add(btnCancel);
 		
 		SignupAction signupAction = new SignupAction();

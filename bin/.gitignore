@@ -1,8 +1,8 @@
-/network/
-/game/
-/main/
-/listener/
-/room/
-/home/
 /lobby/
-/superPanel/
+/home/
+/chat/
+/room/
+/gui/
+/main/
+/game/
+/network/

@@ -28,7 +28,6 @@ public class SMThread extends Thread {
 	public static int seed;
 
 	// 게임 상태 변수
-	private int score;
 	private int level;
 	public int cnt; // 그림을 그리는데 사용하는 int 변수
 	public static int gameCnt; // 게임 도중에 사용되는 이벤트 처리성 int 변수
@@ -44,6 +43,7 @@ public class SMThread extends Thread {
 		gameScreen.setEnemies(enemies);
 		gameScreen.setEffects(effects);
 		gameScreen.setItems(items);
+		gameScreen.init();
 	}
 
 	public void setGamePanel(GamePanel gamePanel) {
@@ -57,7 +57,6 @@ public class SMThread extends Thread {
 	private void gameInit() {
 		cnt = 0;
 		gameCnt = 0;
-		score = 0;
 		level = 1;
 		isBoss = false;
 		enemies = new Vector<Object>();
@@ -84,7 +83,6 @@ public class SMThread extends Thread {
 				// gamePanel.repaint();
 				seed = (seed + 1) % 255;
 				GamePanel.rnd = new Random(seed);
-				System.out.println(gameCnt + " " + seed);
 				process();
 				keyProcess();
 
@@ -190,7 +188,6 @@ public class SMThread extends Thread {
 						// effects.add(expl);
 						int temp = pbuff.getLife() - 1;
 						pbuff.setLife(temp);
-						System.out.println("라이프 1 감소 -> " + temp);
 						if (temp <= 0) {
 							status = Status.GameOver;
 							gameCnt = 0;
@@ -215,7 +212,7 @@ public class SMThread extends Thread {
 		for (int k = 1; k < players.length; k++) {
 			for (i = 0; i < bullets.size(); i++) {
 				buff = (Bullet) (bullets.elementAt(i));
-				if(k == 1)
+				if (k == 1)
 					buff.move();
 				if (buff.dis.x < 10 || buff.dis.x > SMFrame.SCREEN_WIDTH + 10 || buff.dis.y < 10
 						|| buff.dis.y > SMFrame.SCREEN_HEIGHT + 10) {
@@ -223,7 +220,7 @@ public class SMThread extends Thread {
 					// bullets.remove(i);// 화면 밖으로 나가면 총알 제거
 					continue;
 				}
-				if (buff.from == 0) {// 플레이어가 쏜 총알이 적에게 명중 판정
+				if (buff.from > 0) {// 플레이어가 쏜 총알이 적에게 명중 판정
 					for (j = 0; j < enemies.size(); j++) {
 						ebuff = (Enemy) (enemies.elementAt(j));
 						dist = GetDistance(buff.center.x, buff.center.y, ebuff.center.x, ebuff.center.y);
@@ -266,7 +263,7 @@ public class SMThread extends Thread {
 
 							addObject(effects, expl);
 							// effects.add(expl);
-							score++;// 점수 추가
+							players[buff.from].addScore(1);// 점수 추가
 							removeObject(bullets, bullets.get(i));
 							// bullets.remove(i);// 총알 소거
 							break;// 총알이 소거되었으므로 루프 아웃
@@ -288,7 +285,6 @@ public class SMThread extends Thread {
 							players[k].setLife(temp);
 							removeObject(bullets, bullets.get(i));
 							players[k].powerDown();
-							System.out.println("라이프 1 감소 -> " + temp);
 							if (temp <= 0) {
 								status = Status.GameOver;
 								gameCnt = 0;
@@ -360,7 +356,6 @@ public class SMThread extends Thread {
 			if (gameCnt > 2210) {// 보스전 타임 아웃으로 보스전을 종료한다
 				isBoss = false;
 				gameCnt = 0;
-				System.out.println("보스 타임아웃");
 			}
 		} else {
 			if (gameCnt < 500)
@@ -377,7 +372,6 @@ public class SMThread extends Thread {
 				control = 3;
 			else {
 				// 기존에 레벨만 올려주던 부분에서, 레벨을 올려주면서 보스 캐릭터를 등장시킨다
-				System.out.println("보스 등장");
 				isBoss = true;
 				Enemy en = new Enemy(gamePanel, 1, SMFrame.SCREEN_WIDTH * 100, 24000, 1, 0, level);
 				addObject(enemies, en);
@@ -438,7 +432,7 @@ public class SMThread extends Thread {
 				if (dist < 1000) {// 아이템 획득
 					switch (buff.kind) {
 					case 0:// 일반 득점
-						score += 100;
+						players[j].addScore(100);
 						break;
 					case 1:// 실드
 						players[j].setShield(5);
@@ -456,8 +450,8 @@ public class SMThread extends Thread {
 							if (ebuff.kind == 1) {// 해당 인덱스에 할당된 적 캐릭터가 보스 캐릭터일
 								// 경우는 전멸에 해당하지 않고 HP 10 감소
 								// 줄인다. 1 이하라면 1.
-								score += 300;
-								ebuff.life = ebuff.life - 10;
+								players[j].addScore(100);
+								ebuff.life = ebuff.life - 10*level;
 								if (ebuff.life <= 1)
 									ebuff.life = 1;
 								continue;
@@ -496,7 +490,7 @@ public class SMThread extends Thread {
 							addObject(effects, expl);
 							// effects.add(expl);// 폭발 이펙트 추가
 							ebuff.pos.x = -10000;// 다음 처리에서 소거될 수 있도록
-							score += 50;
+							players[j].addScore(50);
 							removeObject(enemies, ebuff);
 							// enemies.remove(ebuff);//적 캐릭터 소거
 						}
@@ -504,9 +498,9 @@ public class SMThread extends Thread {
 						// 적 총알 전부 소거
 						for (int k = 0; k < bullets.size(); k++) {
 							Bullet bbuff = (Bullet) (bullets.elementAt(k));
-							if (bbuff.from != 0) {
+							if (bbuff.from == 0) {
 								bbuff.pos.x = -10000;
-								score++;
+								players[j].addScore(1);
 							}
 							removeObject(bullets, bbuff);
 							// bullets.remove(bbuff);
@@ -518,8 +512,10 @@ public class SMThread extends Thread {
 					}
 					removeObject(items, items.get(i));
 					// items.remove(i);
-				} else if (buff.move())
-					removeObject(items, items.get(i));
+				} else if (j == players.length - 1) {
+					if (buff.move())
+						removeObject(items, items.get(i));
+				}
 				// items.remove(i);
 			}
 		}
@@ -539,5 +535,9 @@ public class SMThread extends Thread {
 
 	public int GetDistance(int x1, int y1, int x2, int y2) {
 		return Math.abs((y2 - y1) * (y2 - y1) + (x2 - x1) * (x2 - x1));
+	}
+
+	public int getLevel() {
+		return this.level;
 	}
 }

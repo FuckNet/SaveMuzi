@@ -36,7 +36,7 @@ public class Item extends Object {
 		pos = new Point(x, y);
 		dis = new Point(x / 100, y / 100);
 		center = new Point(dis.x + IWIDTH/2, dis.y + IHEIGHT/2);
-		speed = -200;
+		speed = -300;
 		cnt = 0;
 	}
 

@@ -1,6 +1,7 @@
 package lobby;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
@@ -10,11 +11,13 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Vector;
 
-import javax.swing.JButton;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import gui.ChatFieldPanel;
+import gui.MyTextArea;
 import home.LoginPanel;
 import main.SMFrame;
 import network.SMNet;
@@ -22,15 +25,21 @@ import superPanel.ReceiveJPanel;
 
 public class LobbyPanel extends ReceiveJPanel {// implements Runnable{
 	private static final String BG_LOBBY = "res/background/backgroundLobby.png";
-
+	private static final String BG_CHATFIELD = "res/background/backgroundChatField.png";
+	private static final String BG_CHAT = "res/background/backgroundChat.png";
+	private static final String BTN_CREATEROOM = "res/logo/createRoom.png";
+	private static final String BTN_LOGOUT = "res/logo/logoutBtn.png";
+	
 	private SMFrame smFrame;
 	private SMNet smNet;
 	private Image backgroundLobby;
 
 	private Vector<RoomInfo> rooms = new Vector<RoomInfo>();
-	private JButton createRoomBtn;
-	private JButton logoutBtn;
-	private JTextArea chatTextArea;
+	private JLabel createRoomBtn;
+	private JLabel logoutBtn;
+	private JScrollPane scrollPane;
+	private MyTextArea chatTextArea;
+	private ChatFieldPanel chatField;
 	private JTextField chatTextField;
 
 	public LobbyPanel(SMFrame smFrame) {
@@ -39,47 +48,51 @@ public class LobbyPanel extends ReceiveJPanel {// implements Runnable{
 		setLayout(null);
 		backgroundLobby = Toolkit.getDefaultToolkit().getImage(BG_LOBBY);
 
-		createRoomBtn = new JButton("방 생성");
-		createRoomBtn.setBounds(smFrame.getWidth() * 3 / 5, 0, smFrame.getWidth() * 1 / 5,
+		chatTextArea = new MyTextArea(BG_CHAT);
+		scrollPane = new JScrollPane();
+		scrollPane.setBounds(smFrame.getWidth() * 4 / 7, smFrame.getHeight() * 1 / 5, smFrame.getWidth() * 3 / 8,
+				smFrame.getHeight() * 4 / 7);
+		scrollPane.setViewportView(chatTextArea);
+		add(scrollPane);
+		
+		chatTextField = new JTextField();
+		chatTextField.setOpaque(false);
+		chatTextField.setBackground(new Color(190, 160, 255));
+		chatTextField.setBorder(null);
+		chatTextField.setFont(new Font("맑은 고딕", Font.PLAIN, 20));
+		chatTextField.addActionListener(new MyAction());
+		chatTextField.setBounds(10, 10, smFrame.getWidth() * 3 / 8 - 20,
+				smFrame.getHeight() * 1 / 10 - 20);
+		chatField = new ChatFieldPanel(scrollPane, BG_CHATFIELD);
+		chatField.add(chatTextField);
+		add(chatField);
+
+		createRoomBtn = new JLabel();
+		createRoomBtn.setIcon(new ImageIcon(BTN_CREATEROOM));
+		createRoomBtn.setBounds(smFrame.getWidth() * 3 / 5+10, 30, smFrame.getWidth() * 1 / 5,
 				smFrame.getHeight() * 1 / 6);
-		createRoomBtn.addActionListener(new ActionListener() {
+		createRoomBtn.addMouseListener(new MouseAdapter() {
 			@Override
-			public void actionPerformed(ActionEvent arg0) {
+			public void mouseClicked(MouseEvent e) {
 				smNet.sendMSG("/CREATEROOM ");
 				smFrame.roomPanel.addUser(LoginPanel.userID);
 				smFrame.sequenceControl("roomPanel", rooms.size() + 1);
 			}
 		});
 		add(createRoomBtn);
-		logoutBtn = new JButton("로그아웃");
-		logoutBtn.setBounds(smFrame.getWidth() * 4 / 5, 0, smFrame.getWidth() * 1 / 5,
+		logoutBtn = new JLabel();
+		logoutBtn.setIcon(new ImageIcon(BTN_LOGOUT));
+		logoutBtn.setBounds(smFrame.getWidth() * 4 / 5, 25, smFrame.getWidth() * 1 / 5,
 				smFrame.getHeight() * 1 / 6);
-		logoutBtn.addActionListener(new ActionListener() {
+		logoutBtn.addMouseListener(new MouseAdapter() {
 			@Override
-			public void actionPerformed(ActionEvent arg0) {
+			public void mouseClicked(MouseEvent e) {
 				smFrame.sequenceControl("homePanel", 1);
 				smNet.sendMSG("/LOGOUT");
 			}
 		});
 		add(logoutBtn);
-
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(smFrame.getWidth() * 4 / 7, smFrame.getHeight() * 1 / 5, smFrame.getWidth() * 3 / 8,
-				smFrame.getHeight() * 3 / 6);
-		add(scrollPane);
-		chatTextArea = new JTextArea();
-		scrollPane.setViewportView(chatTextArea);
-		chatTextArea.setForeground(new Color(255,0,0));
-		chatTextArea.setDisabledTextColor(new Color(0, 0, 0));
-		chatTextArea.setLineWrap(true);
-		chatTextArea.setBackground(new Color(190, 235, 255));
-		
-		chatTextField = new JTextField();
-		chatTextField.setBounds(smFrame.getWidth() * 4 / 7, smFrame.getHeight() *  8 / 10, smFrame.getWidth() * 3 / 8,
-				smFrame.getHeight() * 1 / 10);
-		chatTextField.setBackground(new Color(190, 160, 255));
-		chatTextField.addActionListener(new MyAction());
-		add(chatTextField);
+		repaint();
 	}
 
 	public void paintComponent(Graphics g) {
@@ -89,7 +102,6 @@ public class LobbyPanel extends ReceiveJPanel {// implements Runnable{
 
 	@Override
 	public void receiveMSG(String msg) {
-		System.out.println(msg);
 		String splitMsg[];
 		splitMsg = msg.split(" ");
 		if (splitMsg.length < 1)
@@ -119,8 +131,8 @@ public class LobbyPanel extends ReceiveJPanel {// implements Runnable{
 
 	public void addRoom() {
 		RoomInfo room = new RoomInfo();
-		room.setLocation(0, RoomInfo.HEIGHT * rooms.size());
-		room.setRoomName("방 " + (rooms.size() + 1));
+		room.setLocation(50, RoomInfo.HEIGHT * rooms.size() + 50);
+		room.setRoomName("Room " + (rooms.size() + 1));
 		room.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
@@ -150,6 +162,13 @@ public class LobbyPanel extends ReceiveJPanel {// implements Runnable{
 				chatTextField.setText(""); // 메세지를 보내고 나면 메세지 쓰는창을 비운다.
 				chatTextField.requestFocus(); // 메세지를 보내고 커서를 다시 텍스트 필드로 위치시킨다
 			}
+		}
+	}
+
+	public void resetRooms() {
+		for(int i=0; i<rooms.size(); i++) {
+			remove(rooms.get(i));
+			rooms.remove(i);
 		}
 	}
 }

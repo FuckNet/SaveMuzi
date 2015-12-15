@@ -50,10 +50,6 @@ public class GamePanel extends ReceiveJPanel {
 	public void init() {
 		bullets = new Vector<Object>();
 	}
-	
-	public SMNet getSMNet() {
-		return smNet;
-	}
 
 	public void addBullet(Bullet bullet) {
 		//add(bullet);
@@ -62,6 +58,14 @@ public class GamePanel extends ReceiveJPanel {
 
 	public void setThread(SMThread smThread) {
 		this.mainWork = smThread;
+	}
+	
+	public SMThread getSMThread() {
+		return this.mainWork;
+	}
+	
+	public SMNet getSMNet() {
+		return smNet;
 	}
 
 	public Player[] getPlayer() {
@@ -115,6 +119,8 @@ public class GamePanel extends ReceiveJPanel {
 		for (int i = 1; i <= maxPlayerNum; i++) {
 			p[i] = new Player(this);
 			p[i].setY(smFrame.getHeight() * i / (maxPlayerNum + 1));
+			p[i].setNumber(i);
+			p[i].setImg();
 		}
 
 		Enemy.setPlayers(p);

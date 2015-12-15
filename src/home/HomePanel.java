@@ -18,21 +18,21 @@ import superPanel.ReceiveJPanel;
 
 public class HomePanel extends ReceiveJPanel {
 	private static final String BG_HOME = "res/background/backgroundHome.png";
-	private static final String LOGO = "res/logo/logo.png";
+	private static final String BG_HOME2 = "res/background/backgroundHome2.png";
 	private static final String PUSHBAR = "res/foreground/pushSpace.png";
-
 	private Thread th;
 
 	private SMNet smNet;
 	private SMFrame smFrame;
 	private Image backgroundHome;
+	private Image backgroundHome2;
 	private Image pushBarImage;
+	private Image curImge;
 
 	LoginPanel loginPanel;
 	SignUpPanel signUpPanel;
 
 	private JLabel pushBarLabel;
-	private JLabel logoLabel;
 
 	public HomePanel(SMFrame smFrame) {
 		setLayout(null);
@@ -40,11 +40,9 @@ public class HomePanel extends ReceiveJPanel {
 		smNet = smFrame.getSMNet();
 
 		loginPanel = new LoginPanel(smNet, this);
-		loginPanel.setLocation((smFrame.getWidth() - loginPanel.getWidth()) / 2,
-				(smFrame.getHeight() - loginPanel.getHeight()) * 3 / 5);
+		loginPanel.setLocation(smFrame.getWidth()*2/5, 100);
 		signUpPanel = new SignUpPanel(smNet, this);
-		signUpPanel.setLocation((smFrame.getWidth() - loginPanel.getWidth()) / 2,
-				(smFrame.getHeight() - loginPanel.getHeight()) * 3 / 5);
+		signUpPanel.setLocation(smFrame.getWidth()*2/5, 100);
 		try {
 			Thread.sleep(200);
 		} catch (InterruptedException e) {
@@ -52,6 +50,8 @@ public class HomePanel extends ReceiveJPanel {
 			e.printStackTrace();
 		}
 		backgroundHome = Toolkit.getDefaultToolkit().getImage(BG_HOME);
+		backgroundHome2 = Toolkit.getDefaultToolkit().getImage(BG_HOME2);
+		curImge = backgroundHome;
 		ImageIcon pushBarIcon = new ImageIcon(PUSHBAR);
 		pushBarLabel = new JLabel();
 		pushBarLabel.setSize(500, 100);
@@ -63,13 +63,6 @@ public class HomePanel extends ReceiveJPanel {
 		pushBarIcon = new ImageIcon(pushBarImage2);
 		pushBarLabel.setIcon(pushBarIcon);
 
-		logoLabel = new JLabel();
-		logoLabel.setSize(600, 100);
-		logoLabel.setLocation((smFrame.getWidth() - logoLabel.getWidth()) / 2,
-				(smFrame.getHeight() - logoLabel.getHeight()) * 1 / 10);
-
-		logoLabel.setIcon(new ImageIcon(LOGO));
-		add(logoLabel);
 		addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
@@ -115,6 +108,7 @@ public class HomePanel extends ReceiveJPanel {
 		loginPanel.resetAutoLogin();
 	}
 	public void showLogin() {
+		curImge = backgroundHome2;
 		add(loginPanel);
 		repaint();
 		loginPanel.tf_ID.setText("");
@@ -154,7 +148,7 @@ public class HomePanel extends ReceiveJPanel {
 
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		g.drawImage(backgroundHome, 0, 0, getWidth(), getHeight(), this);
+		g.drawImage(curImge, 0, 0, getWidth(), getHeight(), this);
 	}
 
 }

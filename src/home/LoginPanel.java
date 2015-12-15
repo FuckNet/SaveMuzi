@@ -18,6 +18,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -29,8 +30,8 @@ public class LoginPanel extends JPanel {
 	private static final String BG_LOGIN = "res/background/backgroundLogin.png";
 	private static final String FILE_NAME = "res/login/user.txt";
 
-	private static final int WIDTH = 400;
-	private static final int HEIGHT = 400;
+	private static final int WIDTH = 500;
+	private static final int HEIGHT = 550;
 	private Image backgroundLogin;
 
 	private HomePanel homePanel;
@@ -96,52 +97,55 @@ public class LoginPanel extends JPanel {
 		setLayout(null);
 		setBackground(new Color(100, 200, 255));
 
-		JLabel lblLogo = new JLabel("Save Muzi");
-		lblLogo.setBounds(60, 30, 170, 34);
-		lblLogo.setFont(new Font("Serif", Font.PLAIN, 30));
+		JLabel lblLogo = new JLabel("Log In");
+		lblLogo.setBounds(110, 60, 400, 100);
+		lblLogo.setFont(new Font("Serif", Font.PLAIN, 100));
 		add(lblLogo);
 
 		JLabel lblNewLabel = new JLabel("ID");
-		lblNewLabel.setBounds(60, 77, 90, 40);
+		lblNewLabel.setBounds(160, 200, 90, 40);
+		lblNewLabel.setFont(new Font("¸¼Àº °íµñ", Font.BOLD, 30));
 		add(lblNewLabel);
 
 		tf_ID = new JTextField();
-		tf_ID.setBounds(92, 84, 150, 21);
+		tf_ID.setBounds(210, 208, 150, 30);
+		tf_ID.setSize(150, 30);
 		add(tf_ID);
 		tf_ID.setColumns(10);
 
 		JLabel lblServerIp = new JLabel("Password");
-		lblServerIp.setBounds(14, 121, 90, 34);
+		lblServerIp.setBounds(54, 261, 200, 34);
+		lblServerIp.setFont(new Font("¸¼Àº °íµñ", Font.BOLD, 30));
 		add(lblServerIp);
 
 		tf_PW = new JTextField();
-		tf_PW.setColumns(10);
-		tf_PW.setBounds(92, 128, 150, 21);
+		tf_PW.setBounds(210, 268, 150, 30);
 		add(tf_PW);
+		tf_PW.setColumns(10);
 
 		checkSave = new JCheckBox();
 		checkSave.setText("¾ÆÀÌµð, ºñ¹Ð¹øÈ£ ÀúÀå");
-		checkSave.setBounds(70, 175, 180, 21);
-		checkSave.setBackground(new Color(100, 200, 255));
-		checkSave.setFont(new Font("¸¼Àº °íµñ", Font.PLAIN, 14));
+		checkSave.setBounds(140, 325, 230, 21);
+		checkSave.setOpaque(false);
+		checkSave.setFont(new Font("¸¼Àº °íµñ", Font.BOLD, 20));
 		add(checkSave);
 
 		checkAuto = new JCheckBox();
 		checkAuto.setText("ÀÚµ¿ ·Î±×ÀÎ");
-		checkAuto.setBounds(70, 211, 180, 21);
-		checkAuto.setBackground(new Color(100, 200, 255));
-		checkAuto.setFont(new Font("¸¼Àº °íµñ", Font.PLAIN, 14));
+		checkAuto.setBounds(140, 365, 150, 21);
+		checkAuto.setOpaque(false);
+		checkAuto.setFont(new Font("¸¼Àº °íµñ", Font.BOLD, 20));
 		add(checkAuto);
 
 		btnLogin = new JButton("Log in");
-		btnLogin.setBounds(46, 251, 186, 30);
+		btnLogin.setBounds(150, 425, 186, 30);
 		add(btnLogin);
 
 		btnSignup = new JButton("Sign up");
-		btnSignup.setBounds(46, 296, 186, 30);
+		btnSignup.setBounds(150, 475, 186, 30);
 		add(btnSignup);
 
-		ConnectAction action = new ConnectAction();
+		ConnectAction action = new ConnectAction(); 
 		btnLogin.addActionListener(action);
 		tf_ID.addActionListener(action);
 		tf_PW.addActionListener(action);

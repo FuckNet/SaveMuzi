@@ -73,7 +73,7 @@ public class Enemy extends Object {
       }
       //System.out.println("나는 이거야 : " + imgIndex + ", w : " + eWidth + ", h : " + eHeight + " 이거로 함");
       center = new Point((x + eWidth) / 100 / 2, (y + eHeight) / 100 / 2);
-      life = 3 + GamePanel.RAND(0, 2) * level;// 게임 레벨에 따라 라이프와 탄을 쏘는 시간이 짧아진다
+      life = 2 + GamePanel.RAND(0, 1) * level;// 게임 레벨에 따라 라이프와 탄을 쏘는 시간이 짧아진다
       cnt = GamePanel.RAND(level * 5, 80);
       shoottype = GamePanel.RAND(0, 4);
       hitrange = 1500;
@@ -81,12 +81,12 @@ public class Enemy extends Object {
       case 0:// 큐브 네우로이 전용 셋팅
          break;
       case 1:// 보스 전용 셋팅
-         life = 150 + 20 * level;
+         life = 100 + 15 * level;
          mode = 0;
          hitrange = 12000;
          break;
       case 2:// 위치 네우로이 전용 셋팅
-         life = 8 + GamePanel.RAND(0, 2) * level;
+         life = 4 + GamePanel.RAND(0, 2) * level;
          hitrange = 2000;
          cnt = -(GamePanel.RAND(30, 50));
          break;
@@ -114,7 +114,7 @@ public class Enemy extends Object {
          if (mode != 4)
             break;
          if (cnt < 30 && cnt % 5 == 0) {
-            bul = new Bullet(pos.x, pos.y + eHeight * 100 / 2, 0, 1, 90, 5, 1);
+            bul = new Bullet(pos.x, pos.y + eHeight * 100 / 2, 0, 0, 90, 5, 1);
             gamePanel.addBullet(bul);
          }
          if (cnt > 50) {
@@ -131,40 +131,40 @@ public class Enemy extends Object {
          switch (shoottype) {// 공격 형태에 따라 각기 다른 공격을 한다.
          case 0:// 플레이어를 향해 3발을 점사한다
             if (cnt % 100 == 0 || cnt % 103 == 0 || cnt % 106 == 0) {
-               bul = new Bullet(pos.x + eWidth * 100 / 2, pos.y + eHeight * 100 / 2, 0, 1, getAngle(pos.x, pos.y + eHeight * 100 / 2, players[targetPlayer].getX() * 100,
+               bul = new Bullet(pos.x + eWidth * 100 / 2, pos.y + eHeight * 100 / 2, 0, 0, getAngle(pos.x, pos.y + eHeight * 100 / 2, players[targetPlayer].getX() * 100,
                      players[targetPlayer].getY() * 100), 3, 1);
                gamePanel.addBullet(bul);
             }
             break;
          case 1:// 타이머에 맞춰 4방향탄을 발사한다
             if (cnt % 90 == 0 || cnt % 100 == 0 || cnt % 110 == 0) {
-               bul = new Bullet(pos.x + eWidth * 100 / 2, pos.y + eHeight * 100 / 2, 0, 1, (0 + (cnt % 36) * 10) % 360, 3, 1);
+               bul = new Bullet(pos.x + eWidth * 100 / 2, pos.y + eHeight * 100 / 2, 0, 0, (0 + (cnt % 36) * 10) % 360, 3, 1);
                gamePanel.addBullet(bul);
-               bul = new Bullet(pos.x + eWidth * 100 / 2, pos.y + eHeight * 100 / 2, 0, 1, (30 + (cnt % 36) * 10) % 360, 3, 1);
+               bul = new Bullet(pos.x + eWidth * 100 / 2, pos.y + eHeight * 100 / 2, 0, 0, (30 + (cnt % 36) * 10) % 360, 3, 1);
                gamePanel.addBullet(bul);
-               bul = new Bullet(pos.x + eWidth * 100 / 2, pos.y + eHeight * 100 / 2, 0, 1, (60 + (cnt % 36) * 10) % 360, 3, 1);
+               bul = new Bullet(pos.x + eWidth * 100 / 2, pos.y + eHeight * 100 / 2, 0, 0, (60 + (cnt % 36) * 10) % 360, 3, 1);
                gamePanel.addBullet(bul);
-               bul = new Bullet(pos.x + eWidth * 100 / 2, pos.y + eHeight * 100 / 2, 0, 1, (90 + (cnt % 36) * 10) % 360, 3, 1);
+               bul = new Bullet(pos.x + eWidth * 100 / 2, pos.y + eHeight * 100 / 2, 0, 0, (90 + (cnt % 36) * 10) % 360, 3, 1);
                gamePanel.addBullet(bul);
             }
             break;
          case 2:// 짧은 간격으로 플레이어 근처를 향해 한 발씩 발사한다
             if (cnt % 30 == 0 || cnt % 60 == 0 || cnt % 90 == 0 || cnt % 120 == 0 || cnt % 150 == 0
                   || cnt % 180 == 0) {
-               bul = new Bullet(pos.x + eWidth * 100 / 2, pos.y + eHeight * 100 / 2, 0, 1, (getAngle(pos.x, pos.y + eHeight * 100 / 2, players[targetPlayer].getX() * 100,
+               bul = new Bullet(pos.x + eWidth * 100 / 2, pos.y + eHeight * 100 / 2, 0, 0, (getAngle(pos.x, pos.y + eHeight * 100 / 2, players[targetPlayer].getX() * 100,
                      players[targetPlayer].getY() * 100) + GamePanel.RAND(-20, 20)) % 360, 2, 1);
                gamePanel.addBullet(bul);
             }
             break;
          case 3:// 플레이어를 향해 3갈래탄을 발사한다
             if (cnt % 90 == 0 || cnt % 110 == 0 || cnt % 130 == 0) {
-               bul = new Bullet(pos.x + eWidth * 100 / 2, pos.y + eHeight * 100 / 2, 0, 1, getAngle(pos.x, pos.y + eHeight * 100 / 2, players[targetPlayer].getX() * 100,
+               bul = new Bullet(pos.x + eWidth * 100 / 2, pos.y + eHeight * 100 / 2, 0, 0, getAngle(pos.x, pos.y + eHeight * 100 / 2, players[targetPlayer].getX() * 100,
                      players[targetPlayer].getY() * 100), 2, 1);
                gamePanel.addBullet(bul);
-               bul = new Bullet(pos.x + eWidth * 100 / 2, pos.y + eHeight * 100 / 2, 0, 1, (getAngle(pos.x, pos.y + eHeight * 100 / 2, players[targetPlayer].getX() * 100,
+               bul = new Bullet(pos.x + eWidth * 100 / 2, pos.y + eHeight * 100 / 2, 0, 0, (getAngle(pos.x, pos.y + eHeight * 100 / 2, players[targetPlayer].getX() * 100,
                      players[targetPlayer].getY() * 100) - 20) % 360, 2, 1);
                gamePanel.addBullet(bul);
-               bul = new Bullet(pos.x + eWidth * 100 / 2, pos.y + eHeight * 100 / 2, 0, 1, (getAngle(pos.x, pos.y + eHeight * 100 / 2, players[targetPlayer].getX() * 100,
+               bul = new Bullet(pos.x + eWidth * 100 / 2, pos.y + eHeight * 100 / 2, 0, 0, (getAngle(pos.x, pos.y + eHeight * 100 / 2, players[targetPlayer].getX() * 100,
                      players[targetPlayer].getY() * 100) + 20) % 360, 2, 1);
                gamePanel.addBullet(bul);
             }
@@ -183,7 +183,7 @@ public class Enemy extends Object {
                lv = (10 - level) * 5;
             if (cnt % lv == 0 || cnt % (lv + 5) == 0 || cnt % (lv + 15) == 0) {
                for (i = 0; i < 4 + (50 - lv) / 5; i++) {
-                  bul = new Bullet(pos.x, pos.y + eHeight * 100 / 2, 0, 1, (30 * i + (cnt % 36) * 10) % 360, 5, 1);
+                  bul = new Bullet(pos.x, pos.y + eHeight * 100 / 2, 0, 0, (30 * i + (cnt % 36) * 10) % 360, 5, 1);
                   gamePanel.addBullet(bul);
                }
                /*
@@ -202,7 +202,7 @@ public class Enemy extends Object {
                lv = 10 - level;
             if (cnt % lv == 0) {
                bul = new Bullet(pos.x - 3000 + GamePanel.RAND(-10, +10) * 100,
-                     pos.y + eHeight * 100 / 2 + GamePanel.RAND(10, 80) * 100, 0, 1, 90, 5 + (10 - lv) / 2, 1);
+                     pos.y + eHeight * 100 / 2 + GamePanel.RAND(10, 80) * 100, 0, 0, 90, 5 + (10 - lv) / 2, 1);
                gamePanel.addBullet(bul);
             }
             break;

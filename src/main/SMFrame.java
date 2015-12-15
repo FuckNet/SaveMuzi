@@ -22,7 +22,7 @@ public class SMFrame extends JFrame {
    private Container contentPane;
 
    private HomePanel homePanel;
-   private LobbyPanel lobbyPanel;
+   public LobbyPanel lobbyPanel;
    public RoomPanel roomPanel;
    private GamePanel gamePanel;
 
